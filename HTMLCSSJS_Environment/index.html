@@ -7,9 +7,7 @@
     <script defer="defer" src="/static/js/main.49e54bba.js"></script>
     <link href="index.css" rel="stylesheet">
 
-    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
-    <script> zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
-        ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "ee6b7db5b51705a13dc2339db3edaf6d"];</script>
+    <script src='./chartjs.js'></script>
 </head>
 
 <body><noscript>You need to enable JavaScript to run this app.</noscript>
@@ -42,18 +40,24 @@
                 <button type="button" id="smallButton">Year</button>
                 <button type="button" id="smallButton">5 Years</button>
                 <button type="button" id="smallButton">All Time</button>
+            </div>
 
+            <div id="chart">
+                <canvas id="buyers" width="600" height="400"></canvas>
                 <script id="myChart" src="./areaChart.js"></script>
-
-                <h2>Balance Change:</h2>
-                <h3>+/- £0.00</h3>
             </div>
 
-            <div class="addButton">
-                <button type="button" id="add">+</button>
-            </div>
+            <h2>Balance Change:</h2>
+            <h3>+/- £0.00</h3>
+        </div>
+
+        <div class="addButton">
+            <button type="button" id="add">+</button>
         </div>
     </div>
+    </div>
+
+    <div id="bg"></div>
 </body>
 
 </html>
