@@ -6,6 +6,10 @@
     <base href="/" />
     <script defer="defer" src="/static/js/main.49e54bba.js"></script>
     <link href="index.css" rel="stylesheet">
+
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <script> zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
+        ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "ee6b7db5b51705a13dc2339db3edaf6d"];</script>
 </head>
 
 <body><noscript>You need to enable JavaScript to run this app.</noscript>
@@ -34,38 +38,12 @@
             </div>
 
             <div class="financeInfo">
-                <h4 id="smallButton">6 Months</h4>
-                <h4 id="smallButton">Year</h4>
-                <h4 id="smallButton">5 Years</h4>
-                <h4 id="smallButton">All Time</h4>
+                <button type="button" id="smallButton">6 Months</button>
+                <button type="button" id="smallButton">Year</button>
+                <button type="button" id="smallButton">5 Years</button>
+                <button type="button" id="smallButton">All Time</button>
 
-                <h3>
-                    HERE IS WHERE A STACKED AREA CHART WOULD BE.<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                    ============================================<br>
-                </h3>
+                <script id="myChart" src="./areaChart.js"></script>
 
                 <h2>Balance Change:</h2>
                 <h3>+/- £0.00</h3>
