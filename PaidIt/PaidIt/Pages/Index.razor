@@ -1,20 +1,50 @@
 ﻿@page "/"
 
-<div id="container">
-    <div>
+<div id="root">
+    <div id="container">
+        <div>
+            <div id="heading">
+                <h1>Accounts</h1>
+            </div>
+            <div id="content">
+                <button type="button" id="account">ACCOUNT</button>
+                <button type="button" id="account">ACCOUNT</button>
+                <button type="button" id="account">ACCOUNT</button>
+            </div>
+        </div>
+
         <div id="heading">
-            <h1>Accounts</h1>
+            <h1>Summary</h1>
+            <h2>
+                £0.00
+            </h2>
         </div>
-        <div id="content">
-            <button type="button" id="account">ACCOUNT</button>
-            <button type="button" id="account">ACCOUNT</button>
-            <button type="button" id="account">ACCOUNT</button>
+
+        <div id="heading">
+            <h1>Financial History</h1>
         </div>
+
+        <div class="financeInfo">
+            <button type="button" id="smallButton">6 Months</button>
+            <button type="button" id="smallButton">Year</button>
+            <button type="button" id="smallButton">5 Years</button>
+            <button type="button" id="smallButton">All Time</button>
+        </div>
+
+        <div>
+            <h3><br>FINANCIAL CHART</h3>
+        </div>
+
+        <div id="chart">
+            <canvas id="myChart" width="600" height="400"></canvas>
+            @*<script src="../HTMLCSSJS_Environment/areaChart.js"></script>*@
+        </div>
+
+        <h2>Balance Change:</h2>
+        <h3>+/- £0.00</h3>
     </div>
 
-    <div id="heading">
-        <h1>Chart</h1>
+    <div class="addButton">
+        <button type="button" id="add">+</button>
     </div>
-
-    <button type="button" id="add">+</button>
 </div>
