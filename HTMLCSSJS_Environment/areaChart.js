@@ -1,3 +1,5 @@
+const currency = "GBP";
+
 new Chart(document.getElementById("myChart"), {
     type: 'line',
     data: {
@@ -29,30 +31,72 @@ new Chart(document.getElementById("myChart"), {
             tooltip: {
                 mode: 'index'
             },
+            legend: {
+                labels: {
+                    // This more specific font property overrides the global property
+                    font: {
+                        size: 20,
+
+                    }
+                }
+            }
         },
-        interaction: {
+        interaction:
+        {
             mode: 'nearest',
             axis: 'x',
             intersect: false
         },
         scales: {
             x: {
-                title: {
+                title:
+                {
                     display: true,
-                    text: 'Month'
+                    text: 'Month',
+                    font:
+                    {
+                        size: 20
+                    }
+                },
+                ticks:
+                {
+                    font:
+                    {
+                        size: 20,
+                    },
+                    color: 'rgb(209, 209, 209)'
                 }
             },
             y: {
                 beginAtZero: true,
                 stacked: true,
-                title: {
+                title:
+                {
                     display: true,
-                    text: 'Total Money'
-                },
-                ticks: {
-                    callback: function (value, index, values) {
-                        return '£' + value;
+                    text: 'Total Money',
+                    font:
+                    {
+                        size: 20
                     }
+                },
+                ticks:
+                {
+                    callback: function (value, index, values)
+                    {
+                        if (currency == "USD")
+                        {
+                            return '$' + value;
+                        }
+                        else if (currency == "GBP")
+                        {
+                            return '£' + value;
+                        }
+                    },
+                    font:
+                    {
+                        size: 20
+                    },
+                    color: 'rgb(209, 209, 209)'
                 }
             }
         }
