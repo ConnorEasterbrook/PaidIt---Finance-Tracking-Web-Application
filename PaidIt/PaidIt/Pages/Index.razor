@@ -1,6 +1,8 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components;
+@using Microsoft.JSInterop;
 
-<div id="root">
+<div id="root" @onmousemove="ShowChart">
     <div id="container">
         <div>
             <div id="heading">
@@ -37,7 +39,6 @@
 
         <div id="chart">
             <canvas id="myChart" width="600" height="400"></canvas>
-            @*<script src="../HTMLCSSJS_Environment/areaChart.js"></script>*@
         </div>
 
         <h2>Balance Change:</h2>
@@ -48,3 +49,19 @@
         <button type="button" id="add">+</button>
     </div>
 </div>
+
+@code
+{
+    public bool isLoaded = false;
+
+    [Inject]
+    public IJSRuntime JSRuntime { get; set; }
+    public async Task ShowChart()
+    {
+        if (!isLoaded)
+        {
+            await JSRuntime.InvokeVoidAsync("ShowJSChart");
+            isLoaded = true;
+        }
+    }
+}
