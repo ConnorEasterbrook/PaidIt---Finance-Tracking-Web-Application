@@ -1,6 +1,6 @@
 const currency = "GBP";
 
-// window.onload = ShowJSChart;
+window.onload = ShowJSChart;
 
 function ShowJSChart()
 {
