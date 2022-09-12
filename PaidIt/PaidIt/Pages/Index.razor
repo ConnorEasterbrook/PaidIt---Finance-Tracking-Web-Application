@@ -9,9 +9,9 @@
                 <h1>Accounts</h1>
             </div>
             <div id="content">
-                <button type="button" id="account">ACCOUNT</button>
-                <button type="button" id="account">ACCOUNT</button>
-                <button type="button" id="account">ACCOUNT</button>
+                <button type="button" id="account" class="accountOne">ACCOUNT</button>
+                <button type="button" id="account" class="accountTwo">ACCOUNT</button>
+                <button type="button" id="account" class="accountThree">ACCOUNT</button>
             </div>
         </div>
 
@@ -39,6 +39,7 @@
 
         <div id="chart">
             <canvas id="myChart" width="600" height="400"></canvas>
+            @*<script src="../HTMLCSSJS_Environment/areaChart.js"></script>*@
         </div>
 
         <h2>Balance Change:</h2>
@@ -46,8 +47,30 @@
     </div>
 
     <div class="addButton">
-        <button type="button" id="add">+</button>
+        <button type="button" id="add" @onclick="OpenInputMenu">+</button>
     </div>
+
+    <div id="inputMenu">
+        <div class="inputMenuContent">
+            <span class="close" @onclick="CloseInputMenu">&times;</span>
+            <h3>Input Menu</h3>
+            <p>Please enter the date of the financial check-in:</p>
+            <span id="inputMenuField"><input type="date" class="noBorder" name="date"></span>
+            <div id="gap"></div>
+            <p>Please enter the amount of money you have:</p>
+            <span id="inputMenuField">£<input type="number" class="noBorder" name="amount"></span>
+            <div id="gap"></div>
+            <p>Please select the account you are checking-in:</p>
+            <div id="content">
+                <button type="button" id="account" class="accountOne">ACCOUNT</button>
+                <button type="button" id="account" class="accountTwo">ACCOUNT</button>
+                <button type="button" id="account" class="accountThree">ACCOUNT</button>
+            </div>
+            <div id="gap"></div>
+            <button type="button" id="account">CONFIRM</button>
+        </div>
+    </div>
+    @*<script src="../HTMLCSSJS_Environment/inputMenu.js"></script>*@
 </div>
 
 @code
@@ -63,5 +86,15 @@
             await JSRuntime.InvokeVoidAsync("ShowJSChart");
             isLoaded = true;
         }
+    }
+
+    public async Task OpenInputMenu()
+    {
+        await JSRuntime.InvokeVoidAsync("ShowInputMenu");
+    }
+
+    public async Task CloseInputMenu()
+    {
+        await JSRuntime.InvokeVoidAsync("HideInputMenu");
     }
 }

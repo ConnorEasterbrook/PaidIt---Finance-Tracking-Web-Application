@@ -1,5 +1,7 @@
 const currency = "GBP";
 
+/*window.onload = ShowJSChart;*/
+
 function ShowJSChart()
 {
     JSChart();
@@ -9,7 +11,7 @@ function JSChart()
 {
     new Chart(document.getElementById("myChart"), {
         type: 'line',
-        data:{
+        data: {
             labels: ['June', 'July', 'August', 'September', 'October', 'November', 'December'],
             datasets: [{
                 data: [100, 200, 500, 200, 100, 300, 400],
@@ -29,7 +31,8 @@ function JSChart()
                 borderColor: "#cccccc",
                 backgroundColor: "#9081cc",
                 fill: true
-            }]
+            }
+            ]
         },
         options: {
             responsive: true,
@@ -109,4 +112,3 @@ function JSChart()
         }
     });
 }
-
