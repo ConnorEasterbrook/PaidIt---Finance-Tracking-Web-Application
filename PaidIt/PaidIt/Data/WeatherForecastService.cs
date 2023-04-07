@@ -5,7 +5,7 @@ public class WeatherForecastService
 {
     string _dbPath;
     public string StatusMessage { get; set; }
-    private SQLiteAsyncConnection conn;
+    private SQLiteAsyncConnection SQLConnection;
     public WeatherForecastService(string dbPath)
     {
         _dbPath = dbPath;
@@ -13,22 +13,22 @@ public class WeatherForecastService
     private async Task InitAsync()
     {
         // Don't Create database if it exists
-        if (conn != null)
+        if (SQLConnection != null)
             return;
         // Create database and WeatherForecast Table
-        conn = new SQLiteAsyncConnection(_dbPath);
-        await conn.CreateTableAsync<WeatherForecast>();
+        SQLConnection = new SQLiteAsyncConnection(_dbPath);
+        await SQLConnection.CreateTableAsync<WeatherForecast>();
     }
     public async Task<List<WeatherForecast>> GetForecastAsync()
     {
         await InitAsync();
-        return await conn.Table<WeatherForecast>().ToListAsync();
+        return await SQLConnection.Table<WeatherForecast>().ToListAsync();
     }
     public async Task<WeatherForecast> CreateForecastAsync(
         WeatherForecast paramWeatherForecast)
     {
         // Insert
-        await conn.InsertAsync(paramWeatherForecast);
+        await SQLConnection.InsertAsync(paramWeatherForecast);
         // return the object with the
         // auto incremented Id populated
         return paramWeatherForecast;
@@ -37,7 +37,7 @@ public class WeatherForecastService
         WeatherForecast paramWeatherForecast)
     {
         // Update
-        await conn.UpdateAsync(paramWeatherForecast);
+        await SQLConnection.UpdateAsync(paramWeatherForecast);
         // Return the updated object
         return paramWeatherForecast;
     }
@@ -45,7 +45,7 @@ public class WeatherForecastService
         WeatherForecast paramWeatherForecast)
     {
         // Delete
-        await conn.DeleteAsync(paramWeatherForecast);
+        await SQLConnection.DeleteAsync(paramWeatherForecast);
         return paramWeatherForecast;
     }
 }
