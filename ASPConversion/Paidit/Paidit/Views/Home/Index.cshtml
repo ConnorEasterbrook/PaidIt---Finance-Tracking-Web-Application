@@ -2,7 +2,112 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@using Microsoft.AspNetCore.Components;
+@using Microsoft.JSInterop;
+
+<head>
+    <script src="~/js/chartjs.js"></script>
+</head>
+<div id="root" onmouseover="ShowJSChart">
+    <div id="container">
+        <div>
+            <div id="heading">
+                <h1>Accounts</h1>
+            </div>
+            <div id="content">
+                <button type="button" id="account" class="accountOne">ACCOUNT</button>
+                <button type="button" id="account" class="accountTwo">ACCOUNT</button>
+                <button type="button" id="account" class="accountThree">ACCOUNT</button>
+            </div>
+        </div>
+
+        <div id="heading">
+            <h1>Summary</h1>
+            <h2>
+                £0.00
+            </h2>
+        </div>
+
+        <div id="heading">
+            <h1>Financial History</h1>
+        </div>
+
+        <div class="financeInfo">
+            <button type="button" id="smallButton">6 Months</button>
+            <button type="button" id="smallButton">Year</button>
+            <button type="button" id="smallButton">5 Years</button>
+            <button type="button" id="smallButton">All Time</button>
+        </div>
+
+        <div>
+            <h3><br>FINANCIAL CHART</h3>
+        </div>
+
+        <div id="chart">
+            <canvas id="myChart" width="600" height="400"></canvas>
+            <script src="~/js/areaChart.js"></script>
+        </div>
+
+        <h2>Balance Change:</h2>
+        <h3>+/- £0.00</h3>
+    </div>
+
+    <div class="addButton">
+        <button type="button" id="add" onclick="OpenInputMenu">+</button>
+    </div>
+
+    <div id="inputMenu">
+        <div class="inputMenuContent">
+            <span class="close" onclick="CloseInputMenu">&times;</span>
+            <h3>Input Menu</h3>
+            <p>Please enter the date of the financial check-in:</p>
+            <span id="inputMenuField"><input type="date" class="noBorder" name="date"></span>
+            <div id="gap"></div>
+            <p>Please enter the amount of money you have:</p>
+            <span id="inputMenuField">£<input type="number" class="noBorder" name="amount"></span>
+            <div id="gap"></div>
+            <p>Please select the account you are checking-in:</p>
+            <div id="content">
+                <button type="button" id="account" class="accountOne">ACCOUNT</button>
+                <button type="button" id="account" class="accountTwo">ACCOUNT</button>
+                <button type="button" id="account" class="accountThree">ACCOUNT</button>
+            </div>
+            <div id="gap"></div>
+            <button type="button" id="account" onclick="CloseInputMenu">CONFIRM</button>
+        </div>
+    </div>
+    @*<script src="~/js/inputMenu.js"></script>*@
+
+    <script>
+        window.onload = function ()
+        {
+            ShowJSChart();
+        };
+    </script>
 </div>
+
+
+@*@{
+    public bool isLoaded = false;
+
+    [Inject]
+    public IJSRuntime JSRuntime { get; set; }
+    public async Task ShowChart()
+    {
+        if (!isLoaded)
+        {
+            await JSRuntime.InvokeVoidAsync("ShowJSChart");
+            isLoaded = true;
+        }
+    }
+
+    public async Task OpenInputMenu()
+    {
+        await JSRuntime.InvokeVoidAsync("ShowInputMenu");
+    }
+
+    public async Task CloseInputMenu()
+    {
+        await JSRuntime.InvokeVoidAsync("HideInputMenu");
+    }
+}*@
