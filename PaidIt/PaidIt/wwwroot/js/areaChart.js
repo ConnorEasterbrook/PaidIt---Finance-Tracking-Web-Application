@@ -1,39 +1,13 @@
 const currency = "GBP";
+let chart;
 
-window.onload = ShowJSChart;
-
-function ShowJSChart()
+function InitializeChart()
 {
-    JSChart();
-}
-
-function JSChart()
-{
-    new Chart(document.getElementById("myChart"),
-        {
+    chart = new Chart(document.getElementById("myChart"), {
         type: 'line',
         data: {
-            labels: ['June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            datasets: [{
-                data: [100, 200, 500, 200, 100, 300, 400],
-                label: "Account A",
-                borderColor: "#6b6b6b",
-                backgroundColor: "#81b6cc",
-                fill: true
-            }, {
-                data: [200, 400, 100, 200, 300, 400, 100],
-                label: "Account B",
-                borderColor: "#6b6b6b",
-                backgroundColor: "#81cc9e",
-                fill: true
-            }, {
-                data: [300, 200, 100, 200, 300, 100, 500],
-                label: "Account C",
-                borderColor: "#cccccc",
-                backgroundColor: "#9081cc",
-                fill: true
-            }
-            ]
+            labels: [],
+            datasets: []
         },
         options: {
             responsive: true,
@@ -43,35 +17,28 @@ function JSChart()
                 },
                 legend: {
                     labels: {
-                        // This more specific font property overrides the global property
                         font: {
-                            size: 20,
-
+                            size: 20
                         }
                     }
                 }
             },
-            interaction:
-            {
+            interaction: {
                 mode: 'nearest',
                 axis: 'x',
                 intersect: false
             },
             scales: {
                 x: {
-                    title:
-                    {
+                    title: {
                         display: true,
                         text: 'Month',
-                        font:
-                        {
+                        font: {
                             size: 20
                         }
                     },
-                    ticks:
-                    {
-                        font:
-                        {
+                    ticks: {
+                        font: {
                             size: 20,
                         },
                         color: 'rgb(209, 209, 209)'
@@ -80,17 +47,14 @@ function JSChart()
                 y: {
                     beginAtZero: true,
                     stacked: true,
-                    title:
-                    {
+                    title: {
                         display: true,
                         text: 'Total Money',
-                        font:
-                        {
+                        font: {
                             size: 20
                         }
                     },
-                    ticks:
-                    {
+                    ticks: {
                         callback: function (value, index, values)
                         {
                             if (currency == "USD")
@@ -102,8 +66,7 @@ function JSChart()
                                 return '£' + value;
                             }
                         },
-                        font:
-                        {
+                        font: {
                             size: 20
                         },
                         color: 'rgb(209, 209, 209)'
@@ -112,4 +75,66 @@ function JSChart()
             }
         }
     });
+}
+
+function AddAccount()
+{
+    const accountName = prompt("Enter the name of the account:");
+    if (accountName)
+    {
+        const accountData = {
+            label: accountName,
+            data: [],
+            borderColor: "#6b6b6b",
+            backgroundColor: getRandomColor(),
+            fill: true,
+        };
+        chart.data.datasets.push(accountData);
+        chart.update();
+    }
+}
+
+function AddData()
+{
+    const accountName = document.getElementById("accountName").value;
+    const amount = parseFloat(document.getElementById("amount").value);
+    const date = document.getElementById("date").value;
+
+    const accountIndex = accounts.findIndex(account => account.name === accountName);
+    if (accountIndex === -1)
+    {
+        alert(`Account ${accountName} does not exist`);
+        return;
+    }
+
+    if (isNaN(amount))
+    {
+        alert("Please enter a valid amount");
+        return;
+    }
+
+    const parsedDate = new Date(date);
+    if (isNaN(parsedDate.getTime()))
+    {
+        alert("Please enter a valid date");
+        return;
+    }
+
+    const accountData = chart.data.datasets[accountIndex].data;
+    const label = chart.data.datasets[accountIndex].label;
+    const index = accountData.findIndex(data => data.x === parsedDate);
+    if (index !== -1)
+    {
+        accountData[index].y += amount;
+    } else
+    {
+        accountData.push({ x: parsedDate, y: amount });
+    }
+
+    chart.update();
+}
+
+function UpdateData(months)
+{
+    console.log(months);
 }

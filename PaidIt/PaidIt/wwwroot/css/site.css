@@ -56,7 +56,7 @@ h3 {
     margin-top: 10px;
 }
 
-#account {
+.account {
     font-size: 1.2rem;
     border: none;
     border-radius: 12px;
@@ -68,35 +68,35 @@ h3 {
     transition: all 0.25s;
 }
 
-    #account:hover {
+    .account:hover {
         background-color: rgb(203, 145, 218);
         color: rgb(29, 27, 36);
         transition: all 0.25s;
     }
 
-    #account:active {
+    .account:active {
         background-color: rgb(178, 114, 194);
         color: rgb(29, 27, 36);
         width: 125px;
         height: 45px;
     }
 
-.accountOne {
+#accountOne {
     background-color: #81b6cc;
     color: #222222;
 }
 
-.accountTwo {
+#accountTwo {
     background-color: #81cc9e;
     color: #222222;
 }
 
-.accountThree {
+#accountThree {
     background-color: #9081cc;
     color: #222222;
 }
 
-#smallButton {
+.smallButton {
     display: inline-block;
     margin: 8px;
     color: black;

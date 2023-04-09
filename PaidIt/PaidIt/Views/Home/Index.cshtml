@@ -1,31 +1,27 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var currency = "GBP";
 }
 
 @using Microsoft.AspNetCore.Components;
 @using Microsoft.JSInterop;
 
-<head>
-    <script src="~/js/chartjs.js"></script>
-</head>
-<div id="root" onmouseover="ShowJSChart">
+<div id="root">
     <div id="container">
-        <div>
-            <div id="heading">
+        <div id="heading">
+            <div>
                 <h1>Accounts</h1>
             </div>
             <div id="content">
-                <button type="button" id="account" class="accountOne">ACCOUNT</button>
-                <button type="button" id="account" class="accountTwo">ACCOUNT</button>
-                <button type="button" id="account" class="accountThree">ACCOUNT</button>
+                <button type="button" class="account" id="accountOne">ACCOUNT</button>
+                <button type="button" class="account" onclick="AddAccount()">Add Account</button>
             </div>
-        </div>
-
-        <div id="heading">
-            <h1>Summary</h1>
-            <h2>
-                £0.00
-            </h2>
+            <div>
+                <h1>Summary</h1>
+                <h2>
+                    £0.00
+                </h2>
+            </div>
         </div>
 
         <div id="heading">
@@ -33,10 +29,10 @@
         </div>
 
         <div class="financeInfo">
-            <button type="button" id="smallButton">6 Months</button>
-            <button type="button" id="smallButton">Year</button>
-            <button type="button" id="smallButton">5 Years</button>
-            <button type="button" id="smallButton">All Time</button>
+            <button type="button" class="smallButton" onclick="UpdateData(6)">6 Months</button>
+            <button type="button" class="smallButton" onclick="UpdateData(12)">Year</button>
+            <button type="button" class="smallButton" onclick="UpdateData(60)">5 Years</button>
+            <button type="button" class="smallButton" onclick="UpdateData(0)">All Time</button>
         </div>
 
         <div>
@@ -45,69 +41,166 @@
 
         <div id="chart">
             <canvas id="myChart" width="600" height="400"></canvas>
-            <script src="~/js/areaChart.js"></script>
         </div>
 
         <h2>Balance Change:</h2>
         <h3>+/- £0.00</h3>
     </div>
 
-    <div class="addButton">
-        <button type="button" id="add" onclick="OpenInputMenu">+</button>
+    <div class="form-group">
+        <label for="accountName">Account Name:</label>
+        <input type="text" class="form-control" id="accountName" placeholder="Enter account name">
     </div>
-
-    <div id="inputMenu">
-        <div class="inputMenuContent">
-            <span class="close" onclick="CloseInputMenu">&times;</span>
-            <h3>Input Menu</h3>
-            <p>Please enter the date of the financial check-in:</p>
-            <span id="inputMenuField"><input type="date" class="noBorder" name="date"></span>
-            <div id="gap"></div>
-            <p>Please enter the amount of money you have:</p>
-            <span id="inputMenuField">£<input type="number" class="noBorder" name="amount"></span>
-            <div id="gap"></div>
-            <p>Please select the account you are checking-in:</p>
-            <div id="content">
-                <button type="button" id="account" class="accountOne">ACCOUNT</button>
-                <button type="button" id="account" class="accountTwo">ACCOUNT</button>
-                <button type="button" id="account" class="accountThree">ACCOUNT</button>
-            </div>
-            <div id="gap"></div>
-            <button type="button" id="account" onclick="CloseInputMenu">CONFIRM</button>
-        </div>
+    <div class="form-group">
+        <label for="amount">Amount:</label>
+        <input type="number" class="form-control" id="amount" placeholder="Enter amount">
     </div>
-    @*<script src="~/js/inputMenu.js"></script>*@
+    <div class="form-group">
+        <label for="date">Date:</label>
+        <input type="date" class="form-control" id="date">
+    </div>
+    <button type="button" class="btn btn-primary" onclick="AddData()">Add Data</button>
 
     <script>
-        window.onload = function ()
+        var chart;
+
+        window.onload = InitializeChart;
+
+        function InitializeChart()
         {
-            ShowJSChart();
-        };
+            chart = new Chart(document.getElementById("myChart"), {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: []
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        tooltip: {
+                            mode: 'index'
+                        },
+                        legend: {
+                            labels: {
+                                font: {
+                                    size: 20
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month',
+                                font: {
+                                    size: 20
+                                }
+                            },
+                            ticks: {
+                                font: {
+                                    size: 20,
+                                },
+                                color: 'rgb(209, 209, 209)'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'Total Money',
+                                font: {
+                                    size: 20
+                                }
+                            },
+                            ticks: {
+                                callback: function (value, index, values)
+                                {
+                                    if ('@currency' === "USD")
+                                    {
+                                        return '$' + value;
+                                    } else if ('@currency' === "GBP")
+                                    {
+                                        return '£' + value;
+                                    }
+                                },
+                                font: {
+                                    size: 20
+                                },
+                                color: 'rgb(209, 209, 209)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function AddAccount()
+        {
+            const accountName = prompt("Enter the name of the account:");
+            if (accountName)
+            {
+                const accountData = {
+                    label: accountName,
+                    data: [],
+                    borderColor: "#6b6b6b",
+                    backgroundColor: getRandomColor(),
+                    fill: true,
+                };
+                chart.data.datasets.push(accountData);
+                chart.update();
+            }
+        }
+
+        function AddData()
+        {
+            const accountName = document.getElementById("accountName").value;
+            const amount = parseFloat(document.getElementById("amount").value);
+            const date = document.getElementById("date").value;
+
+            const accountIndex = accounts.findIndex(account => account.name === accountName);
+            if (accountIndex === -1)
+            {
+                alert(`Account ${accountName} does not exist`);
+                return;
+            }
+
+            if (isNaN(amount))
+            {
+                alert("Please enter a valid amount");
+                return;
+            }
+
+            const parsedDate = new Date(date);
+            if (isNaN(parsedDate.getTime()))
+            {
+                alert("Please enter a valid date");
+                return;
+            }
+
+            const accountData = chart.data.datasets[accountIndex].data;
+            const label = chart.data.datasets[accountIndex].label;
+            const index = accountData.findIndex(data => data.x === parsedDate);
+            if (index !== -1)
+            {
+                accountData[index].y += amount;
+            } else
+            {
+                accountData.push({ x: parsedDate, y: amount });
+            }
+
+            chart.update();
+        }
+
+        function UpdateData(months)
+        {
+            console.log(months);
+        }
     </script>
 </div>
-
-
-@*@{
-    public bool isLoaded = false;
-
-    [Inject]
-    public IJSRuntime JSRuntime { get; set; }
-    public async Task ShowChart()
-    {
-        if (!isLoaded)
-        {
-            await JSRuntime.InvokeVoidAsync("ShowJSChart");
-            isLoaded = true;
-        }
-    }
-
-    public async Task OpenInputMenu()
-    {
-        await JSRuntime.InvokeVoidAsync("ShowInputMenu");
-    }
-
-    public async Task CloseInputMenu()
-    {
-        await JSRuntime.InvokeVoidAsync("HideInputMenu");
-    }
-}*@
