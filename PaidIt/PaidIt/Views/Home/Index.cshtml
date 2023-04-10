@@ -6,6 +6,17 @@
 @using Microsoft.AspNetCore.Components;
 @using Microsoft.JSInterop;
 
+@* TODO:
+1. Install Python
+2. Use Python to retrieve, store, and analyse data on all inputted data
+2a. Make it so Python creates an initial .JSON file and then saves information to it
+2b. Allow users to attach their .JSON file to be overwritten
+2c. Start with basic analysis like predicted amounts at the 1st of their individual next month
+2d. Create financial reports in a .PDF format that users can download
+3. Allow for each made account to have its own page and statistics
+4. Tidy dashboard so that it looks professional and offers all information at a glance
+*@
+
 <div id="root">
     <div id="container">
         <div id="heading">
@@ -245,13 +256,18 @@
                 endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
             }
 
-            chart.data.labels = GetMonthLabels(startDate, endDate);
-            chart.data.datasets.forEach((dataset) =>
+            $("#myChart").fadeOut(200, function ()
             {
-                dataset.data = GetAccountData(dataset, startDate, endDate);
-            });
+                chart.data.labels = GetMonthLabels(startDate, endDate);
+                chart.data.datasets.forEach((dataset) =>
+                {
+                    dataset.data = GetAccountData(dataset, startDate, endDate);
+                });
 
-            chart.update();
+                chart.update();
+
+                $("#myChart").fadeIn(200);
+            });
         }
 
         function GetMonthLabels(startDate, endDate)
