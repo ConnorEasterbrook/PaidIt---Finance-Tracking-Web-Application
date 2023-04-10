@@ -32,7 +32,7 @@
             <button type="button" class="smallButton" onclick="UpdateData(6)">6 Months</button>
             <button type="button" class="smallButton" onclick="UpdateData(12)">Year</button>
             <button type="button" class="smallButton" onclick="UpdateData(60)">5 Years</button>
-            <button type="button" class="smallButton" onclick="UpdateData(0)">All Time</button>
+            <button type="button" id="allTimeButton" class="smallButton" onclick="UpdateData(0)">All Time</button>
         </div>
 
         <div>
@@ -63,6 +63,7 @@
 
     <script>
         var chart;
+        var accounts = [];
 
         window.onload = InitializeChart;
 
@@ -139,6 +140,8 @@
                     }
                 }
             });
+
+            UpdateData();
         }
 
         function AddAccount()
@@ -147,15 +150,29 @@
             if (accountName)
             {
                 const accountData = {
+                    name: accountName,
                     label: accountName,
                     data: [],
                     borderColor: "#6b6b6b",
-                    backgroundColor: getRandomColor(),
+                    backgroundColor: GetRandomColour(),
                     fill: true,
                 };
                 chart.data.datasets.push(accountData);
                 chart.update();
+
+                accounts.push(accountData);
             }
+        }
+
+        function GetRandomColour()
+        {
+            const letters = '0123456789ABCDEF';
+            let colour = '#';
+            for (let i = 0; i < 6; i++)
+            {
+                colour += letters[Math.floor(Math.random() * 16)];
+            }
+            return colour;
         }
 
         function AddData()
@@ -177,8 +194,8 @@
                 return;
             }
 
-            const parsedDate = new Date(date);
-            if (isNaN(parsedDate.getTime()))
+            const parsedDate = Date.parse(date);
+            if (isNaN(parsedDate))
             {
                 alert("Please enter a valid date");
                 return;
@@ -198,9 +215,74 @@
             chart.update();
         }
 
-        function UpdateData(months)
+        function UpdateData(months = 12)
         {
-            console.log(months);
+            const now = new Date();
+            let startDate, endDate;
+
+            let allTimeButton = document.getElementById("allTimeButton");
+
+            if (chart.data.datasets.length === 0)
+            {
+                allTimeButton.style.backgroundColor = "rgb(209, 209, 209)";
+                allTimeButton.style.opacity = "0.5";
+                allTimeButton.disabled = true;
+            }
+            else
+            {
+                allTimeButton.disabled = false;
+            }
+
+            if (months === 0)
+            {
+                const firstDate = new Date(chart.data.datasets[0].data[0].x);
+                startDate = new Date(firstDate.getFullYear(), firstDate.getMonth(), 1);
+                endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            }
+            else
+            {
+                startDate = new Date(now.getFullYear() - Math.floor(months / 12), now.getMonth() - (months % 12) + 1, 1);
+                endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            }
+
+            chart.data.labels = GetMonthLabels(startDate, endDate);
+            chart.data.datasets.forEach((dataset) =>
+            {
+                dataset.data = GetAccountData(dataset, startDate, endDate);
+            });
+
+            chart.update();
+        }
+
+        function GetMonthLabels(startDate, endDate)
+        {
+            const labels = [];
+
+            for (let d = startDate; d <= endDate; d.setMonth(d.getMonth() + 1))
+            {
+                labels.push(d.toLocaleString('default', { month: 'long', year: 'numeric' }));
+            }
+
+            return labels;
+        }
+
+        function GetAccountData(account, startDate, endDate)
+        {
+            const data = [];
+
+            for (let d = startDate; d <= endDate; d.setMonth(d.getMonth() + 1))
+            {
+                const index = account.data.findIndex(data => data.x.toLocaleString('default', { month: 'long', year: 'numeric' }) === d.toLocaleString('default', { month: 'long', year: 'numeric' }));
+                if (index !== -1)
+                {
+                    data.push({ x: d, y: account.data[index].y });
+                } else
+                {
+                    data.push({ x: d, y: 0 });
+                }
+            }
+
+            return data;
         }
     </script>
 </div>
