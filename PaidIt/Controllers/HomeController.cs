@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Paidit.Models;
 using System.Diagnostics;
-using System.IO;
 
 namespace Paidit.Controllers
 {
@@ -30,10 +29,17 @@ namespace Paidit.Controllers
 
             engine.SetSearchPaths(libraries);
 
+            string jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "userdata.json");
+            if (!System.IO.File.Exists(jsonFilePath))
+            {
+                System.IO.File.WriteAllText(jsonFilePath, "[]");
+            }
+
             var pythonSource = engine.CreateScriptSourceFromFile(Path.Combine(Directory.GetCurrentDirectory(), "PythonScripts", "PythonScript.py"));
             pythonSource.Execute(scope);
 
-            
+            dynamic read_json_file = scope.GetVariable("read_json_file");
+            var result = read_json_file(Path.Combine(Directory.GetCurrentDirectory(), "userdata.json"));
 
             return View();
         }
