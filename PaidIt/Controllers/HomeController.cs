@@ -32,7 +32,7 @@ namespace Paidit.Controllers
             string jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "userdata.json");
             if (!System.IO.File.Exists(jsonFilePath))
             {
-                System.IO.File.WriteAllText(jsonFilePath, "[]");
+                System.IO.File.WriteAllText(jsonFilePath, "{}");
             }
 
             var pythonSource = engine.CreateScriptSourceFromFile(Path.Combine(Directory.GetCurrentDirectory(), "PythonScripts", "PythonScript.py"));
@@ -40,6 +40,11 @@ namespace Paidit.Controllers
 
             dynamic read_json_file = scope.GetVariable("read_json_file");
             var result = read_json_file(Path.Combine(Directory.GetCurrentDirectory(), "userdata.json"));
+
+            string timeTest = DateTime.Now.ToString();
+            dynamic add_data_to_account = scope.GetVariable("add_data_to_account");
+            string result2 = add_data_to_account(jsonFilePath, "Account 1", timeTest, 300);
+            Debug.WriteLine("\n\n" + result2 + "\n\n");
 
             return View();
         }
