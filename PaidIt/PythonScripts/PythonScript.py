@@ -6,23 +6,22 @@ def read_json_file(file_path):
         data = json.load(f)
 
         if "Accounts" not in data:
-            data["Accounts"] = [{}]
+            data = {"Accounts": []}
             write_json_file(file_path, data)
-
-    return data
 
 ### A basic function to write a json file
 def write_json_file(file_path, data):
-    with open(file_path, 'w') as f:
+    with open(file_path, "w") as f:
         json.dump(data, f)
 
 ### A basic function to add a new user to the json file
-def add_bank_account(data, name, account_name):
-    if name not in data:
-        data[name] = {}
-
-    data[name][account_name] = []
-    return data
+def add_bank_account(file_path, account_name):
+    with open(file_path, "r") as f:
+        data = json.load(f)
+    
+        if account_name not in data["Accounts"]:
+            data["Accounts"] = {account_name: {}}
+            write_json_file(file_path, data)
 
 ### A basic function to remove a user from the json file
 def remove_bank_account(data, name, account_name):
