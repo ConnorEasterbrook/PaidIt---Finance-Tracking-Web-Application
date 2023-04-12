@@ -22,8 +22,7 @@
             <div>
                 <h1>Accounts</h1>
             </div>
-            <div id="content">
-                <button type="button" class="account" id="accountOne">ACCOUNT</button>
+            <div id="accountsContainer">
                 <button type="button" class="account" onclick="AddAccount()">Add Account</button>
             </div>
             <div>
@@ -171,7 +170,25 @@
                 chart.update();
 
                 accounts.push(accountData);
+
+                const accountsContainer = document.getElementById("accountsContainer");
+                const accountButton = CreateAccountButton(accountData);
+                accountsContainer.appendChild(accountButton);
             }
+        }
+
+        function CreateAccountButton(account)
+        {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "account";
+            button.innerText = account.name;
+            button.style.backgroundColor = account.backgroundColor;
+            button.onclick = function ()
+            {
+                // do something when the button is clicked
+            };
+            return button;
         }
 
         function GetRandomColour()

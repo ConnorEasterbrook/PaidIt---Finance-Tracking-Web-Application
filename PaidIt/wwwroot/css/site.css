@@ -66,6 +66,8 @@ h3 {
     height: 37.5px;
     overflow: hidden;
     transition: all 0.25s;
+    background-color: #81b6cc;
+    color: #222222;
 }
 
     .account:hover {
