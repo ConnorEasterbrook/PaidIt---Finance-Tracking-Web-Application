@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Scripting.Hosting;
 using Paidit.Models;
 using System.Diagnostics;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Paidit.Controllers
 {
@@ -14,11 +16,19 @@ namespace Paidit.Controllers
         private ScriptScope? _scope;
 
         private string? _pythonPath;
-        private string? _userDataPath;
+        private string _userDataPath;
+
+        private static dynamic? get_data_from_json;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+
+            _userDataPath = Path.Combine(Directory.GetCurrentDirectory(), "userdata.json");
+            if(!System.IO.File.Exists(_userDataPath))
+            {
+                System.IO.File.WriteAllText(_userDataPath, "{}");
+            }
         }
 
         public IActionResult Index()
@@ -42,17 +52,13 @@ namespace Paidit.Controllers
 
             _engine.SetSearchPaths(libraries);
 
-            _userDataPath = Path.Combine(Directory.GetCurrentDirectory(), "userdata.json");
-            if(!System.IO.File.Exists(_userDataPath))
-            {
-                System.IO.File.WriteAllText(_userDataPath, "{}");
-            }
-
             _pythonPath = Path.Combine(Directory.GetCurrentDirectory(), "PythonScripts", "PythonScript.py");
             _engine.ExecuteFile(_pythonPath, _scope);
 
             dynamic read_json_file = _scope.GetVariable("read_json_file");
             read_json_file(_userDataPath);
+
+            get_data_from_json = _scope.GetVariable("get_data_from_json");
         }
 
         public IActionResult Privacy()
@@ -64,6 +70,16 @@ namespace Paidit.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public ActionResult ChartData()
+        {
+            var jsonData = System.IO.File.ReadAllText(_userDataPath);
+            var data = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonData);
+
+            ViewBag.ChartData = data;
+
+            return View();
         }
 
         [HttpPost]

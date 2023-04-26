@@ -1,4 +1,5 @@
 import json
+import urllib
 
 ### A basic function to read a json file
 def read_json_file(file_path):
@@ -13,6 +14,17 @@ def read_json_file(file_path):
 def write_json_file(file_path, data):
     with open(file_path, "w") as f:
         json.dump(data, f)
+
+### A basic function to retrieve the data from the json file
+def get_data_from_json(file_path):
+    data = read_json_file(file_path)
+
+    json_data = json.dumps(data)
+
+    url = "Home/ChartData"
+    headers = {"Content-Type": "application/json"}
+    req = urllib.Request(url, json_data, headers)
+    response = urllib.urlopen(req)
 
 ### A basic function to add a new user to the json file
 def add_bank_account(file_path, account_name):
