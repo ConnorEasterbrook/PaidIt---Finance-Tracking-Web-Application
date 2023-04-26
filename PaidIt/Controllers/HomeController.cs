@@ -15,20 +15,14 @@ namespace Paidit.Controllers
         private ScriptEngine? _engine;
         private ScriptScope? _scope;
 
-        private string? _pythonPath;
-        private string _userDataPath;
+        private static string? _pythonPath;
+        private static string? _userDataPath;
 
         private static dynamic? get_data_from_json;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-
-            _userDataPath = Path.Combine(Directory.GetCurrentDirectory(), "userdata.json");
-            if(!System.IO.File.Exists(_userDataPath))
-            {
-                System.IO.File.WriteAllText(_userDataPath, "{}");
-            }
         }
 
         public IActionResult Index()
@@ -49,6 +43,12 @@ namespace Paidit.Controllers
                 "E:\\Not_Windows\\Code\\IronPython",
                 "E:\\Not_Windows\\Code\\IronPython\\lib\\site-packages"
             };
+
+            _userDataPath = Path.Combine(Directory.GetCurrentDirectory(), "userdata.json");
+            if(!System.IO.File.Exists(_userDataPath))
+            {
+                System.IO.File.WriteAllText(_userDataPath, "{}");
+            }
 
             _engine.SetSearchPaths(libraries);
 
@@ -94,6 +94,28 @@ namespace Paidit.Controllers
 
             dynamic add_bank_account = _scope.GetVariable("add_bank_account");
             add_bank_account(_userDataPath, accountName);
+
+            return new EmptyResult();
+        }
+
+        [HttpPost]
+        public ActionResult SendNewData(string accountName, string date, int amount)
+        {
+            EstablishPython();
+
+            if (_engine == null || _scope == null)
+            {
+                return new EmptyResult();
+            }
+
+            dynamic add_data_to_account = _scope.GetVariable("add_data_to_account");
+
+            Debug.WriteLine("Path: " + _userDataPath);
+            Debug.WriteLine("Account: " + accountName);
+            Debug.WriteLine("Date: " + date);
+            Debug.WriteLine("Amount: " + amount);
+
+            add_data_to_account(_userDataPath, accountName, date, amount);
 
             return new EmptyResult();
         }

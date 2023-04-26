@@ -14,6 +14,7 @@
 2d. Create financial reports in a .PDF format that users can download
 3. Allow for each made account to have its own page and statistics
 4. Tidy dashboard so that it looks professional and offers all information at a glance
+5. Allow for interest calculations & expenses
 *@
 
 <div id="root">
@@ -256,6 +257,23 @@
             }
 
             chart.update();
+
+            console.log(accountName, amount, date);
+
+            // Make an AJAX request to the SendNewData action using jQuery
+            $.ajax({
+                url: "/Home/SendNewData",
+                type: "POST",
+                data: { accountName: accountName, date: date, amount: amount },
+                success: function (result)
+                {
+                    alert("Success");
+                },
+                error: function (xhr, textStatus, errorThrown)
+                {
+                    alert("An error occurred while calling the C# function.");
+                }
+            });
         }
 
         function UpdateData(months = 12)
