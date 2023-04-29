@@ -73,18 +73,49 @@
 
     <script>
         var chart;
-        var accounts = [];
 
-        window.onload = InitializeChart;
-
-        function InitializeChart()
+        // Get the data from chartData in HomeController
+        window.onload = function ()
         {
+            var jsonData = '@Html.Raw(Json.Serialize(ViewBag.ChartData))';
+            const data = JSON.parse(jsonData);
+            InitializeChart(data);
+        };
+
+        function InitializeChart(data)
+        {
+            var accounts = data.Accounts;
+            var datasets = [];
+
+            for (var accountName in accounts)
+            {
+                var accountData = accounts[accountName].Inputs;
+                var dataPoints = [];
+
+                for (var i = 0; i < accountData.length; i++)
+                {
+                    var date = new Date(accountData[i].Date);
+                    var amount = accountData[i].Amount;
+
+                    dataPoints.push({ x: date, y: amount });
+                }
+
+                var dataset = {
+                    label: accountName,
+                    data: dataPoints,
+                    borderColor: "#6b6b6b",
+                    backgroundColor: GetRandomColour(),
+                    fill: true,
+                };
+
+                datasets.push(dataset);
+            }
 
             chart = new Chart(document.getElementById("myChart"), {
                 type: 'line',
                 data: {
                     labels: [],
-                    datasets: []
+                    datasets: datasets,
                 },
                 options: {
                     responsive: true,

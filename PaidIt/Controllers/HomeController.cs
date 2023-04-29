@@ -28,6 +28,7 @@ namespace Paidit.Controllers
         public IActionResult Index()
         {
             EstablishPython();
+            ChartData();
             return View();
         }
 
@@ -116,6 +117,8 @@ namespace Paidit.Controllers
             Debug.WriteLine("Amount: " + amount);
 
             add_data_to_account(_userDataPath, accountName, date, amount);
+
+            ChartData();
 
             return new EmptyResult();
         }
