@@ -43,7 +43,10 @@ def add_bank_account(file_path, account_name):
     if account_name not in data["Accounts"]:
         data["Accounts"][account_name] = {}
 
-        write_json_file(file_path, data)
+    if "Inputs" not in data["Accounts"][account_name]:
+        data["Accounts"][account_name]["Inputs"] = []
+
+    write_json_file(file_path, data)
 
 ### A basic function to remove a user from the json file
 def remove_bank_account(data, name, account_name):

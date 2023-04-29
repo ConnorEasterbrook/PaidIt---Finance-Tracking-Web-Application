@@ -39,9 +39,9 @@
         </div>
 
         <div class="financeInfo">
-            <button type="button" class="smallButton" onclick="UpdateData(6)">6 Months</button>
+            @*<button type="button" class="smallButton" onclick="UpdateData(6)">6 Months</button>
             <button type="button" class="smallButton" onclick="UpdateData(12)">Year</button>
-            <button type="button" class="smallButton" onclick="UpdateData(60)">5 Years</button>
+            <button type="button" class="smallButton" onclick="UpdateData(60)">5 Years</button>*@
             <button type="button" id="allTimeButton" class="smallButton" onclick="UpdateData(0)">All Time</button>
         </div>
 
@@ -73,6 +73,7 @@
 
     <script>
         var chart;
+        let accounts = [];
 
         // Get the data from chartData in HomeController
         window.onload = function ()
@@ -84,11 +85,18 @@
 
         function InitializeChart(data)
         {
-            var accounts = data.Accounts;
+            accounts = data.Accounts;
             var datasets = [];
 
             for (var accountName in accounts)
             {
+                // Check if the account has any data
+                if (accounts[accountName].Inputs.length === 0)
+                {
+                    continue;
+                }
+
+                // Get the data for the account
                 var accountData = accounts[accountName].Inputs;
                 var dataPoints = [];
 
@@ -183,6 +191,23 @@
                 }
             });
 
+            // Add the accounts to the accounts container
+            const accountsContainer = document.getElementById("accountsContainer");
+            for (var accountName in accounts)
+            {
+                const accountData = {
+                    name: accountName,
+                    label: accountName,
+                    data: accounts[accountName].Inputs,
+                    borderColor: "#6b6b6b",
+                    backgroundColor: GetRandomColour(),
+                    fill: true,
+                };
+
+                const accountButton = CreateAccountButton(accountData);
+                accountsContainer.appendChild(accountButton);
+            }
+
             UpdateData();
         }
 
@@ -191,6 +216,13 @@
             const accountName = prompt("Enter the name of the account:");
             if (accountName)
             {
+                // Check if the account already exists
+                if (accounts[accountName])
+                {
+                    alert("An account with that name already exists.");
+                    return;
+                }
+
                 const accountData = {
                     name: accountName,
                     label: accountName,
@@ -202,7 +234,10 @@
                 chart.data.datasets.push(accountData);
                 chart.update();
 
-                accounts.push(accountData);
+                // Add new account to the accounts array
+                accounts[accountName] = {
+                    Inputs: []
+                };
 
                 const accountsContainer = document.getElementById("accountsContainer");
                 const accountButton = CreateAccountButton(accountData);
@@ -307,48 +342,80 @@
             });
         }
 
-        function UpdateData(months = 12)
+        let previousMonth = 1;
+
+        function UpdateData(months = 0)
         {
+            if (previousMonth === months)
+            {
+                return;
+            }
+            previousMonth = months;
+
             const now = new Date();
             let startDate, endDate;
 
-            let allTimeButton = document.getElementById("allTimeButton");
-
-            if (chart.data.datasets.length === 0)
-            {
-                allTimeButton.style.backgroundColor = "rgb(209, 209, 209)";
-                allTimeButton.style.opacity = "0.5";
-                allTimeButton.disabled = true;
-            }
-            else
-            {
-                allTimeButton.disabled = false;
-            }
-
+            // Calculate the start and end dates based on the selected time span
             if (months === 0)
-            {
-                const firstDate = new Date(chart.data.datasets[0].data[0].x);
-                startDate = new Date(firstDate.getFullYear(), firstDate.getMonth(), 1);
+            { 
+                // all time
+                startDate = new Date(chart.data.datasets[0].data[0].x);
                 endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-            }
+            } 
             else
             {
                 startDate = new Date(now.getFullYear() - Math.floor(months / 12), now.getMonth() - (months % 12) + 1, 1);
                 endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
             }
 
-            $("#myChart").fadeOut(200, function ()
+            // Filter the data points for each account based on the selected time span
+            chart.data.datasets.forEach((dataset) =>
             {
-                chart.data.labels = GetMonthLabels(startDate, endDate);
-                chart.data.datasets.forEach((dataset) =>
+                dataset.data = dataset.data.filter((data) =>
                 {
-                    dataset.data = GetAccountData(dataset, startDate, endDate);
+                    const dataDate = new Date(data.x);
+                    return dataDate >= startDate && dataDate <= endDate;
                 });
-
-                chart.update();
-
-                $("#myChart").fadeIn(200);
             });
+
+            // Fill in any missing data points
+            const datasetLabels = chart.data.datasets.map((dataset) => dataset.label);
+            for (let i = 0; i < datasetLabels.length; i++)
+            {
+                const dataset = chart.data.datasets[i];
+                const dataPoints = dataset.data;
+                let emptyMonthValue = null;
+
+                for (let j = 0; j < chart.data.labels.length; j++)
+                {
+                    const label = chart.data.labels[j];
+
+                    if (!dataPoints.some((data) => new Date(data.x).toLocaleString('default', { month: 'long', year: 'numeric' }) === label))
+                    {
+                        if (emptyMonthValue === null)
+                        {
+                            emptyMonthValue = 0;
+                            for (let k = 0; k < datasetLabels.length; k++)
+                            {
+                                const otherDataset = chart.data.datasets[k];
+                                const otherDataPoints = otherDataset.data;
+                                const otherDataPoint = otherDataPoints.find((data) => new Date(data.x).toLocaleString('default', { month: 'long', year: 'numeric' }) === label);
+                                if (otherDataPoint)
+                                {
+                                    emptyMonthValue += otherDataPoint.y;
+                                }
+                            }
+                        }
+                        dataPoints.push({ x: new Date(now.getFullYear() - Math.floor(months / 12) + Math.floor(j / 12), (now.getMonth() - (months % 12) + 1 + j) % 12, 1), y: emptyMonthValue });
+                    }
+                }
+            }
+
+            // Update the labels on the x-axis based on the selected time span
+            chart.data.labels = GetMonthLabels(startDate, endDate);
+
+            // Update the chart
+            chart.update();
         }
 
         function GetMonthLabels(startDate, endDate)
@@ -361,26 +428,6 @@
             }
 
             return labels;
-        }
-
-        function GetAccountData(account, startDate, endDate)
-        {
-            const data = [];
-
-            for (let d = startDate; d <= endDate; d.setMonth(d.getMonth() + 1))
-            {
-                const index = account.data.findIndex(data => data.x.toLocaleString('default', { month: 'long', year: 'numeric' }) === d.toLocaleString('default', { month: 'long', year: 'numeric' }));
-                if (index !== -1)
-                {
-                    data.push({ x: d, y: account.data[index].y });
-                } 
-                else
-                {
-                    data.push({ x: d, y: 0 });
-                }
-            }
-
-            return data;
         }
     </script>
 </div>
