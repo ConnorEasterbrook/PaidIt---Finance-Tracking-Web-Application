@@ -291,7 +291,7 @@
             const amount = parseFloat(document.getElementById("amount").value);
             const date = document.getElementById("date").value;
 
-            const accountIndex = accounts.findIndex(account => account.name === accountName);
+            const accountIndex = chart.data.datasets.findIndex(dataset => dataset.label === accountName);
             if (accountIndex === -1)
             {
                 alert(`Account ${accountName} does not exist`);
