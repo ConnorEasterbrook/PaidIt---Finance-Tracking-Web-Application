@@ -358,20 +358,11 @@
             previousMonth = months;
 
             const now = new Date();
-            let startDate, endDate;
 
-            // Calculate the start and end dates based on the selected time span
-            if (months === 0)
-            { 
-                // all time
-                startDate = new Date(chart.data.datasets[0].data[0].x);
-                endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-            } 
-            else
-            {
-                startDate = new Date(now.getFullYear() - Math.floor(months / 12), now.getMonth() - (months % 12) + 1, 1);
-                endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-            }
+    // Calculate the earliest and latest dates in the datasets
+    let startDate = new Date(Math.min(...chart.data.datasets.flatMap((dataset) => dataset.data.map((data) => new Date(data.x).getTime()))));
+    let endDate = new Date(Math.max(...chart.data.datasets.flatMap((dataset) => dataset.data.map((data) => new Date(data.x).getTime()))));
+
 
             // Update the labels on the x-axis based on the selected time span
             chart.data.labels = GetMonthLabels(startDate, endDate);
