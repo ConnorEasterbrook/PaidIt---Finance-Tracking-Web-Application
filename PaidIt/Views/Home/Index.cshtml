@@ -373,51 +373,24 @@
                 endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
             }
 
-            // Filter the data points for each account based on the selected time span
-            chart.data.datasets.forEach((dataset) =>
-            {
-                dataset.data = dataset.data.filter((data) =>
-                {
-                    const dataDate = new Date(data.x);
-                    return dataDate >= startDate && dataDate <= endDate;
-                });
-            });
-
-            // Fill in any missing data points
-            const datasetLabels = chart.data.datasets.map((dataset) => dataset.label);
-            for (let i = 0; i < datasetLabels.length; i++)
-            {
-                const dataset = chart.data.datasets[i];
-                const dataPoints = dataset.data;
-                let emptyMonthValue = null;
-
-                for (let j = 0; j < chart.data.labels.length; j++)
-                {
-                    const label = chart.data.labels[j];
-
-                    if (!dataPoints.some((data) => new Date(data.x).toLocaleString('default', { month: 'long', year: 'numeric' }) === label))
-                    {
-                        if (emptyMonthValue === null)
-                        {
-                            emptyMonthValue = 0;
-                            for (let k = 0; k < datasetLabels.length; k++)
-                            {
-                                const otherDataset = chart.data.datasets[k];
-                                const otherDataPoints = otherDataset.data;
-                                const otherDataPoint = otherDataPoints.find((data) => new Date(data.x).toLocaleString('default', { month: 'long', year: 'numeric' }) === label);
-                                if (otherDataPoint)
-                                {
-                                    emptyMonthValue += otherDataPoint.y;
-                                }
-                            }
-                        }
-                        dataPoints.push({ x: new Date(now.getFullYear() - Math.floor(months / 12) + Math.floor(j / 12), (now.getMonth() - (months % 12) + 1 + j) % 12, 1), y: emptyMonthValue });
-                    }
-                }
-            }
-
             // Update the labels on the x-axis based on the selected time span
             chart.data.labels = GetMonthLabels(startDate, endDate);
+
+            // Fill in any missing data points
+            chart.data.datasets.forEach((dataset) => {
+                const newData = [];
+
+                chart.data.labels.forEach((label) => {
+                    // Try to find an existing data point
+                    const dataPoint = dataset.data.find((data) => new Date(data.x).toLocaleString('default', { month: 'long', year: 'numeric' }) === label);
+                    const x = new Date(label);
+                    const y = dataPoint ? dataPoint.y : (newData.length > 0 ? newData[newData.length - 1].y : 0);
+
+                    newData.push({ x, y });
+                });
+
+                dataset.data = newData;
+            });
 
             // Update the chart
             chart.update();
