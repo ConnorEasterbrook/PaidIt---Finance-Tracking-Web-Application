@@ -7,13 +7,11 @@
 @using Microsoft.JSInterop;
 
 @* Primary TODO:
-2. Use Python to retrieve, store, and analyse data on all inputted data
-2b. Allow users to attach their .JSON file to be overwritten
-2c. Start with basic analysis like predicted amounts at the 1st of their individual next month
-2d. Create financial reports in a .PDF format that users can download
-3. Allow for each made account to have its own page and statistics
-4. Tidy dashboard so that it looks professional and offers all information at a glance
-5. Allow for interest calculations & expenses
+1. Allow users to attach their .JSON file to be overwritten (Methods written below data input)
+2. Allow for each made account to have its own page and statistics (Important implementation since some accounts may be handled differently to others)
+3. Tidy dashboard so that it looks professional and offers all information at a glance (App must look nice obviously)
+?4. Create financial reports in a .PDF format that users can download (Maybe not needed because who is going to be printing off their finances? Might just be worth making a page showing all data inputs)
+?5. Use Python to analyse data on all inputted data (Analysis is not necessarily needed. Beginner use of it could just be expected next amount base on past few data inputs)
 *@
 
 <div id="root">
@@ -69,6 +67,14 @@
         <input type="date" class="form-control" id="date">
     </div>
     <button type="button" class="btn btn-primary" onclick="AddData()">Add Data</button>
+
+    <!-- 
+        To implement JSON upload, refer to C# script where the userdata file is overwritten.
+        OR
+        Implement a file upload where Python checks the text content of the file and writes any found accounts & dates to the already existing userdata file.
+
+        The second option is obviously better but realistically people will not be running two different files at once. Makes no sense to when this application is for personal use.
+    -->
 
     <script>
         var chart;
