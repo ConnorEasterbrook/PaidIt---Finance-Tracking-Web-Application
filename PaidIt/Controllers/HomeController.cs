@@ -126,5 +126,13 @@ namespace Paidit.Controllers
 
             return new EmptyResult();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> OverwriteUserdata(IFormFile userdataJSON)
+        {
+
+
+            return View();
+        }
     }
 }
