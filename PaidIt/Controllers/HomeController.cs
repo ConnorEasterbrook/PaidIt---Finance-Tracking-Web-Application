@@ -15,8 +15,8 @@ namespace Paidit.Controllers
         private ScriptEngine? _engine;
         private ScriptScope? _scope;
 
-        private static string? _pythonPath;
-        private static string? _userDataPath;
+        private static string _pythonPath;
+        private static string _userDataPath;
 
         private static dynamic? get_data_from_json;
 
@@ -130,9 +130,17 @@ namespace Paidit.Controllers
         [HttpPost]
         public async Task<IActionResult> OverwriteUserdata(IFormFile userdataJSON)
         {
+            if (userdataJSON == null || userdataJSON.Length == 0)
+            {
+                return RedirectToAction("Index");
+            }
 
+            using (var stream = new FileStream(_userDataPath, FileMode.Create))
+            {
+                await userdataJSON.CopyToAsync(stream);
+            }
 
-            return View();
+            return RedirectToAction("Index");
         }
     }
 }
