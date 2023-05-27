@@ -7,11 +7,12 @@
 @using Microsoft.JSInterop;
 
 @* Primary TODO:
-1. Allow users to attach their .JSON file to be overwritten (Methods written below data input)
-2. Allow for each made account to have its own page and statistics (Important implementation since some accounts may be handled differently to others)
-3. Tidy dashboard so that it looks professional and offers all information at a glance (App must look nice obviously)
-?4. Create financial reports in a .PDF format that users can download (Maybe not needed because who is going to be printing off their finances? Might just be worth making a page showing all data inputs)
-?5. Use Python to analyse data on all inputted data (Analysis is not necessarily needed. Beginner use of it could just be expected next amount base on past few data inputs)
+== FREE==
+1. Tidy dashboard so that it looks professional and offers all information at a glance (App must look nice obviously)
+
+== PAID ==
+?2. Create financial reports in a .PDF format that users can download (Maybe not needed because who is going to be printing off their finances? Might just be worth making a page showing all data inputs)
+?3. Use Python to analyse data on all inputted data (Analysis is not necessarily needed. Beginner use of it could just be expected next amount base on past few data inputs)
 
 # Future plans:
 Develop further into a free and a paid version of the app...
@@ -62,36 +63,31 @@ in order to update them in real time. Effectively going from a simple data repre
         <h3>+/- £0.00</h3>
     </div>
 
-    <div class="form-group">
-        <label for="accountName">Account Name:</label>
-        <input type="text" class="form-control" id="accountName" placeholder="Enter account name">
-    </div>
-    <div class="form-group">
-        <label for="amount">Amount:</label>
-        <input type="number" class="form-control" id="amount" placeholder="Enter amount">
-    </div>
-    <div class="form-group">
-        <label for="date">Date:</label>
-        <input type="date" class="form-control" id="date">
-    </div>
-    <button type="button" class="btn btn-primary" onclick="AddData()">Add Data</button>
-
-    <!-- 
-        To implement JSON upload, refer to C# script where the userdata file is overwritten.
-        OR
-        Implement a file upload where Python checks the text content of the file and writes any found accounts & dates to the already existing userdata file.
-
-        The second option is obviously better but realistically people will not be running two different files at once. Makes no sense to when this application is for personal use. Rather, it would
-        be preferred by users to have a file sync between devices. This may be doable but manual upload is easier for me
-    -->
-
-    <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="OverwriteUserdata">
+    <div>
         <div class="form-group">
-            <label for="file">Upload userdata.JSON file</label>
-            <input type="file" id="file" name="userdataJSON">
+            <label for="accountName">Account Name:</label>
+            <input type="text" class="form-control" id="accountName" placeholder="Enter account name">
         </div>
-        <button type="submit" class="btn btn-default">Upload</button>
-    </form>
+        <div class="form-group">
+            <label for="amount">Amount:</label>
+            <input type="number" class="form-control" id="amount" placeholder="Enter amount">
+        </div>
+        <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="date" class="form-control" id="date">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="AddData()">Add Data</button>
+    </div>
+
+    <div>
+        <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="OverwriteUserdata">
+            <div class="form-group">
+                <label for="file">Upload userdata.JSON file</label>
+                <input type="file" id="file" name="userdataJSON">
+            </div>
+            <button type="submit" class="btn btn-default">Upload</button>
+        </form>
+    </div>
 
     <script>
         var chart;
