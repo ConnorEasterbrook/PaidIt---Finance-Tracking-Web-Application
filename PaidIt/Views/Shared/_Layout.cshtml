@@ -18,9 +18,12 @@
     <footer>
         <div class="container">
             <div>
-                <button>Overview</button>
-                <button>Goals</button>
-                <button>Reports</button>
+                <form method="get" asp-controller="Home" asp-action="Index">
+                    <button type="submit">Overview</button>
+                </form>
+                <form method="get" asp-controller="Home" asp-action="Goals">
+                    <button type="submit">Goals</button>
+                </form>
             </div>
             <div id="copyright">
                 &copy; 2023 - Connor Easterbrook

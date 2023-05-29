@@ -32,6 +32,11 @@ namespace Paidit.Controllers
             return View();
         }
 
+        public IActionResult Goals()
+        {
+            return View();
+        }
+
         private void EstablishPython()
         {
             _engine = Python.CreateEngine();

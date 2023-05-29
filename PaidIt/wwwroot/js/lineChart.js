@@ -86,11 +86,7 @@ function InitializeChart(data) {
                     },
                     ticks: {
                         callback: function (value, index, values) {
-                            if ('@currency' === "USD") {
-                                return '$' + value;
-                            } else if ('@currency' === "GBP") {
                                 return '£' + value;
-                            }
                         },
                         font: {
                             size: 20
@@ -217,8 +213,6 @@ function AddData() {
         accountData.push({ x: parsedDate, y: amount });
     }
 
-    chart.update();
-
     console.log(accountName, amount, date);
 
     // Make an AJAX request to the SendNewData action using jQuery
@@ -233,6 +227,8 @@ function AddData() {
             alert("An error occurred while calling the C# function.");
         }
     });
+
+    chart.update();
 }
 
 let previousMonth = 1;

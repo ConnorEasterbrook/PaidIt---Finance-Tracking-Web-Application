@@ -1,6 +1,5 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-    var currency = "GBP";
 }
 
 @using Microsoft.AspNetCore.Components;
@@ -25,18 +24,22 @@ in order to update them in real time. Effectively going from a simple data repre
 
 @*
     TODO:
-    - 
+    - Tidy Dashboard to look nice. Make input popup and have a fold out section under
+    "advanced" that shows the UserData.json upload input.
+    - Make the account colour match the chart colour
+    - Make it so the colours are set and not randomized every time. Might need to be stored
+    in the JSON.
+    - Link buttons on bottom to different pages
+    - Allow creation of basic "goals" with the information, again, stored in the JSON.
 *@
 
 <div id="root">
     <div id="container">
         <div id="heading">
-            <div>
-                <h1>PaidIt</h1>
-            </div>
+            <h1>PaidIt</h1>
             <h2>ACCOUNTS</h2>
             <div id="accountsContainer">
-                <button type="button" class="account" onclick="AddAccount()">Add Account</button>
+                <button type="button" onclick="AddAccount()">Add Account</button>
             </div>
         </div>
 
