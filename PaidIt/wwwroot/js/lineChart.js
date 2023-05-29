@@ -106,7 +106,9 @@ function InitializeChart(data) {
             label: accountName,
             data: accounts[accountName].Inputs,
             borderColor: "#6b6b6b",
-            backgroundColor: GetRandomColour(),
+            backgroundColor: GetRandomColour(), // THIS SHOULD GRAB AN ALREADY DETERMINED
+            // COLOUR FROM THE JSON. IT NEEDS TO BE FROM THE JSON SO THAT IT STAYS THE
+            // SAME EVERY TIME YOU OPEN THE APPLICATION
             fill: true,
         };
 
@@ -131,7 +133,6 @@ function AddAccount() {
             label: accountName,
             data: [],
             borderColor: "#6b6b6b",
-            backgroundColor: GetRandomColour(),
             fill: true,
         };
         chart.data.datasets.push(accountData);

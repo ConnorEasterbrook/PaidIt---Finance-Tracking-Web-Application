@@ -54,16 +54,14 @@ in order to update them in real time. Effectively going from a simple data repre
             <button type="button" id="allTimeButton" class="smallButton" onclick="UpdateData(0)">All Time</button>
         </div> -->
 
-        <div>
-            <h3><br>FINANCIAL CHART</h3>
-        </div>
-
         <div id="chart">
             <canvas id="myChart" width="600" height="400"></canvas>
         </div>
     </div>
 
-    <div>
+    <button type="button" class="fixedButton" id="addDataButton">+</button>
+
+    <div id="hiddenSection">
         <div class="form-group">
             <label for="accountName">Account Name:</label>
             <input type="text" class="form-control" id="accountName" placeholder="Enter account name">
@@ -77,9 +75,10 @@ in order to update them in real time. Effectively going from a simple data repre
             <input type="date" class="form-control" id="date">
         </div>
         <button type="button" class="btn btn-primary" onclick="AddData()">Add Data</button>
-    </div>
 
-    <div>
+        <div id="gap"></div>
+
+        <div>
         <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="OverwriteUserdata">
             <div class="form-group">
                 <label for="file">Upload userdata.JSON file</label>
@@ -88,13 +87,19 @@ in order to update them in real time. Effectively going from a simple data repre
             <button type="submit" class="btn btn-default">Upload</button>
         </form>
     </div>
+    </div>
+
+    
 
     <script>
-        // Get the data from chartData in HomeController
         window.onload = function () {
             var jsonData = '@Html.Raw(Json.Serialize(ViewBag.ChartData))';
             const data = JSON.parse(jsonData);
             InitializeChart(data);
+
+            $("#addDataButton").click(function() {
+                $("#hiddenSection").toggle();
+              });
         };
     </script>
 </div>
