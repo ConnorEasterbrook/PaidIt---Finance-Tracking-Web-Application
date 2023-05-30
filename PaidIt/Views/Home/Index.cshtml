@@ -59,7 +59,7 @@ in order to update them in real time. Effectively going from a simple data repre
         </div>
     </div>
 
-    <button type="button" class="fixedButton" id="addDataButton">+</button>
+    <button type="button" class="fixedButton" id="inputWindowButton">+</button>
 
     <div id="hiddenSection">
         <div class="form-group">
@@ -74,19 +74,17 @@ in order to update them in real time. Effectively going from a simple data repre
             <label for="date">Date:</label>
             <input type="date" class="form-control" id="date">
         </div>
-        <button type="button" class="btn btn-primary" onclick="AddData()">Add Data</button>
-
-        <div id="gap"></div>
+        <button type="button" class="btn btn-primary" id="submitInput" onclick="AddData()">Add Data</button>
 
         <div>
-        <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="OverwriteUserdata">
-            <div class="form-group">
-                <label for="file">Upload userdata.JSON file</label>
-                <input type="file" id="file" name="userdataJSON">
-            </div>
-            <button type="submit" class="btn btn-default">Upload</button>
-        </form>
-    </div>
+            <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="OverwriteUserdata">
+                <div class="form-group">
+                    <label for="file">Upload userdata.JSON file</label>
+                    <input type="file" id="file" name="userdataJSON">
+                </div>
+                <button type="submit" class="btn btn-default">Upload</button>
+            </form>
+        </div>
     </div>
 
     
@@ -97,9 +95,15 @@ in order to update them in real time. Effectively going from a simple data repre
             const data = JSON.parse(jsonData);
             InitializeChart(data);
 
-            $("#addDataButton").click(function() {
-                $("#hiddenSection").toggle();
-              });
+            $("#inputWindowButton").click(function () {
+                console.log("sdijf")
+                $("#hiddenSection").fadeToggle(400);
+            });
+
+            $("#submitInput").click(function () {
+                console.log("sdijf")
+                $("#hiddenSection").fadeToggle(400);
+            });
         };
     </script>
 </div>

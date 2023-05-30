@@ -26,7 +26,7 @@ function InitializeChart(data) {
             label: accountName,
             data: dataPoints,
             borderColor: "#6b6b6b",
-            backgroundColor: GetRandomColour(),
+            backgroundColor: accounts[accountName].Colour,
             fill: true,
         };
 
@@ -106,9 +106,7 @@ function InitializeChart(data) {
             label: accountName,
             data: accounts[accountName].Inputs,
             borderColor: "#6b6b6b",
-            backgroundColor: GetRandomColour(), // THIS SHOULD GRAB AN ALREADY DETERMINED
-            // COLOUR FROM THE JSON. IT NEEDS TO BE FROM THE JSON SO THAT IT STAYS THE
-            // SAME EVERY TIME YOU OPEN THE APPLICATION
+            backgroundColor: accounts[accountName].Colour,
             fill: true,
         };
 
@@ -131,6 +129,7 @@ function AddAccount() {
         const accountData = {
             name: accountName,
             label: accountName,
+            backgroundColor: GetRandomColour(),
             data: [],
             borderColor: "#6b6b6b",
             fill: true,
@@ -206,7 +205,6 @@ function AddData() {
     }
 
     const accountData = chart.data.datasets[accountIndex].data;
-    const label = chart.data.datasets[accountIndex].label;
     const index = accountData.findIndex(data => data.x === parsedDate);
     if (index !== -1) {
         accountData[index].y += amount;
@@ -239,8 +237,6 @@ function UpdateData(months = 0) {
         return;
     }
     previousMonth = months;
-
-    const now = new Date();
 
     // Calculate the earliest and latest dates in the datasets
     let startDate = new Date(Math.min(...chart.data.datasets.flatMap((dataset) => dataset.data.map((data) => new Date(data.x).getTime()))));

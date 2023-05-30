@@ -1,5 +1,6 @@
 import json
 import urllib
+import random
 from datetime import datetime
 
 ### A basic function to read a json file
@@ -45,6 +46,10 @@ def add_bank_account(file_path, account_name):
 
     if "Inputs" not in data["Accounts"][account_name]:
         data["Accounts"][account_name]["Inputs"] = []
+
+    if "Colour" not in data["Accounts"][account_name]:
+        random_color = "#{:06x}".format(random.randint(0, 0xFFFFFF))
+        data["Accounts"][account_name]["Colour"] = random_color
 
     write_json_file(file_path, data)
 
