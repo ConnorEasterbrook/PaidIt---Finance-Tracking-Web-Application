@@ -5,32 +5,14 @@
 @using Microsoft.AspNetCore.Components;
 @using Microsoft.JSInterop;
 
-@* Primary TODO:
-== FREE==
-1. Tidy dashboard so that it looks professional and offers all information at a glance (App must look nice obviously)
-
-== PAID ==
-?2. Create financial reports in a .PDF format that users can download (Maybe not needed because who is going to be printing off their finances? Might just be worth making a page showing all data inputs)
-?3. Use Python to analyse data on all inputted data (Analysis is not necessarily needed. Beginner use of it could just be expected next amount base on past few data inputs)
-
-# Future plans:
-Develop further into a free and a paid version of the app...
-
-Free version has the inputs and data showing, as well as saving goal creators (How much per month/week to put away to achieve result by deadline) as a basic finance assistant app.
-
-Paid version taking into account the user's income and outgoings to create what is essentially a monthly statement that allows the user to allocate whatever is left to put into the savings goals
-in order to update them in real time. Effectively going from a simple data representation app to a real finance assistant app.
-*@
-
 @*
     TODO:
-    - Tidy Dashboard to look nice. Make input popup and have a fold out section under
-    "advanced" that shows the UserData.json upload input.
-    - Make the account colour match the chart colour
-    - Make it so the colours are set and not randomized every time. Might need to be stored
-    in the JSON.
-    - Link buttons on bottom to different pages
+    - Make input able to select existing accounts rather than type
+    - Click account button to hide from chart
+    - Make it so the colours are set and not randomized every time. Make colours able to change
     - Allow creation of basic "goals" with the information, again, stored in the JSON.
+    - Allow deletion of bank accounts showing but keep the data in userdata.JSON
+        - Upon account deletion add date data of account being at £0
 *@
 
 <div id="root">
@@ -43,11 +25,7 @@ in order to update them in real time. Effectively going from a simple data repre
             </div>
         </div>
 
-        <!-- <div id="heading">
-            <h1>Financial History</h1>
-        </div>
-
-         <div class="financeInfo">
+        <!-- <div class="financeInfo">
             @*<button type="button" class="smallButton" onclick="UpdateData(6)">6 Months</button>
             <button type="button" class="smallButton" onclick="UpdateData(12)">Year</button>
             <button type="button" class="smallButton" onclick="UpdateData(60)">5 Years</button>*@
@@ -74,15 +52,17 @@ in order to update them in real time. Effectively going from a simple data repre
             <label for="date">Date:</label>
             <input type="date" class="form-control" id="date">
         </div>
-        <button type="button" class="btn btn-primary" id="submitInput" onclick="AddData()">Add Data</button>
+        <button type="button" id="submitInput" onclick="AddData()">Add Data</button>
+
+        <div id="gap"></div>
 
         <div>
             <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="OverwriteUserdata">
                 <div class="form-group">
                     <label for="file">Upload userdata.JSON file</label>
-                    <input type="file" id="file" name="userdataJSON">
+                    <input type="file" id="fileUpload" name="userdataJSON">
                 </div>
-                <button type="submit" class="btn btn-default">Upload</button>
+                <button type="submit">Upload</button>
             </form>
         </div>
     </div>

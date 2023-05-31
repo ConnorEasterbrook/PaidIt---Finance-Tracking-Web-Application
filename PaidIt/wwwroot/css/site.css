@@ -67,7 +67,7 @@ body {
     justify-content: center;
     text-align: center;
     overflow-x: hidden;
-    overflow-y: visible;
+    overflow-y: hidden;
 }
 
 h1 {
@@ -184,7 +184,9 @@ h3 {
     bottom: 60px;
     right: 20px;
     width: 5%;
+    min-width: 50px;
     height: 5%;
+    min-height: 50px;
     padding: 0;
     background-color: forestgreen;
     font-size: 24px;
@@ -193,13 +195,51 @@ h3 {
 #hiddenSection {
     display: none;
     position: absolute;
-    background-color: black;
+    background-color: #0a162a;
     padding: 20px;
     border-radius: 30px;
-    width: 50%;
-    top: 35%;
+    width: 35%;
+    min-width: 400px;
+    top: 20%;
     left: 50%;
     transform: translate(-50%);
+}
+
+    #hiddenSection label
+    {
+        font-size: 15px;
+        font-weight: bold;
+        margin-top: 10px;
+        margin-left: 25%;
+        margin-right: 25%;
+        height: auto;
+    }
+
+    #hiddenSection input
+    {
+        margin-top: 0px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
+
+    #hiddenSection button
+    {
+        background-color: #4a668d;
+    }
+
+#fileUpload {
+    display: inline-block;
+    width: 80%;
+    padding: 120px 0 0 0;
+    height: 100px;
+    overflow: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background: url('https://cdn1.iconfinder.com/data/icons/hawcons/32/698394-icon-130-cloud-upload-512.png') center center no-repeat #e4e4e4;
+    border-radius: 20px;
+    background-size: 60px 60px;
 }
 
 #inputMenu {

@@ -25,7 +25,7 @@ function InitializeChart(data) {
         var dataset = {
             label: accountName,
             data: dataPoints,
-            borderColor: "#6b6b6b",
+            borderColor: "#ffffff",
             backgroundColor: accounts[accountName].Colour,
             fill: true,
         };
@@ -105,7 +105,7 @@ function InitializeChart(data) {
             name: accountName,
             label: accountName,
             data: accounts[accountName].Inputs,
-            borderColor: "#6b6b6b",
+            borderColor: "#ffffff",
             backgroundColor: accounts[accountName].Colour,
             fill: true,
         };
