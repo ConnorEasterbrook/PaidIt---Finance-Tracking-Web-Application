@@ -7,8 +7,6 @@
 
 @*
     TODO:
-    - Make input able to select existing accounts rather than type
-    - Click account button to hide from chart
     - Make it so the colours are set and not randomized every time. Make colours able to change
     - Allow creation of basic "goals" with the information, again, stored in the JSON.
     - Allow deletion of bank accounts showing but keep the data in userdata.JSON
@@ -41,8 +39,8 @@
 
     <div id="hiddenSection">
         <div class="form-group">
-            <label for="accountName">Account Name:</label>
-            <input type="text" class="form-control" id="accountName" placeholder="Enter account name">
+            <label for="accountDropdown">Account Name:</label>
+            <select class="form-control" id="accountDropdown"></select>
         </div>
         <div class="form-group">
             <label for="amount">Amount:</label>
@@ -70,6 +68,9 @@
     
 
     <script>
+        var buttonContainer = document.getElementById("accountsContainer");
+        var dropdown = document.getElementById("accountDropdown");
+
         window.onload = function () {
             var jsonData = '@Html.Raw(Json.Serialize(ViewBag.ChartData))';
             const data = JSON.parse(jsonData);
@@ -85,5 +86,11 @@
                 $("#hiddenSection").fadeToggle(400);
             });
         };
+
+        dropdown.onchange = function() {
+            var selectedButtonId = this.value;
+            var selectedButton = document.getElementById(selectedButtonId);
+            // do something with the selected button
+        }
     </script>
 </div>

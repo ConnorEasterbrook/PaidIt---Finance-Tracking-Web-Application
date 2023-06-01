@@ -1,6 +1,22 @@
 ﻿var chart;
 let accounts = [];
 
+$('#accountsContainer').on('click', '.account', function () {
+    var index = $(this).index() - 1;
+    var dataset = chart.data.datasets[0]; 
+    var meta = chart.getDatasetMeta(0); 
+
+    // See if this dataset is hidden
+    var wasHidden = meta.hidden === null ? dataset.hidden : meta.hidden;
+
+    // Toggle visibility
+    dataset.hidden = !wasHidden;
+    meta.hidden = !wasHidden;
+
+    // Update chart
+    chart.update();
+});
+
 function InitializeChart(data) {
     accounts = data.Accounts;
     var datasets = [];
@@ -164,12 +180,19 @@ function AddAccount() {
 function CreateAccountButton(account) {
     const button = document.createElement("button");
     button.type = "button";
+    button.id = "account_button " + account.name;
     button.className = "account";
     button.innerText = account.name;
     button.style.backgroundColor = account.backgroundColor;
     button.onclick = function () {
         // do something when the button is clicked
     };
+
+    const option = document.createElement("option");
+    option.value = button.id;
+    option.text = account.name;
+    dropdown.appendChild(option);
+
     return button;
 }
 
@@ -183,7 +206,7 @@ function GetRandomColour() {
 }
 
 function AddData() {
-    const accountName = document.getElementById("accountName").value;
+    const accountName = dropdown.options[dropdown.selectedIndex].text
     const amount = parseFloat(document.getElementById("amount").value);
     const date = document.getElementById("date").value;
 

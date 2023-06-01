@@ -215,7 +215,7 @@ h3 {
         height: auto;
     }
 
-    #hiddenSection input
+    #hiddenSection input, #hiddenSection select
     {
         margin-top: 0px;
         margin-left: auto;
