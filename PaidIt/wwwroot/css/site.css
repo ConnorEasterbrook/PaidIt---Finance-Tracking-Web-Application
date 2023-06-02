@@ -179,6 +179,17 @@ h3 {
     display: flex;
 }
 
+#accountPopUp {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid black;
+}
+
 .fixedButton {
     position: fixed;
     bottom: 60px;

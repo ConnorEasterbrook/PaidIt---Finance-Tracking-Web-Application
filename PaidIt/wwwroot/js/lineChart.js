@@ -1,10 +1,14 @@
 ﻿var chart;
 let accounts = [];
 
+$(document).on('contextmenu', function (e) {
+    e.preventDefault(); // Prevent default right-click behavior
+});
+
 $('#accountsContainer').on('click', '.account', function () {
     var index = $(this).index() - 1;
-    var dataset = chart.data.datasets[0]; 
-    var meta = chart.getDatasetMeta(0); 
+    var dataset = chart.data.datasets[index];
+    var meta = chart.getDatasetMeta(index);
 
     // See if this dataset is hidden
     var wasHidden = meta.hidden === null ? dataset.hidden : meta.hidden;
@@ -12,6 +16,12 @@ $('#accountsContainer').on('click', '.account', function () {
     // Toggle visibility
     dataset.hidden = !wasHidden;
     meta.hidden = !wasHidden;
+
+    if (dataset.hidden) {
+        $(this).css('opacity', '0.5'); 
+    } else {
+        $(this).css('opacity', '1'); 
+    }
 
     // Update chart
     chart.update();

@@ -23,6 +23,11 @@
             </div>
         </div>
 
+        <div id="accountPopUp">
+            <button id="renameButton">Rename</button>
+            <button id="deleteButton">Delete</button>
+        </div>
+
         <!-- <div class="financeInfo">
             @*<button type="button" class="smallButton" onclick="UpdateData(6)">6 Months</button>
             <button type="button" class="smallButton" onclick="UpdateData(12)">Year</button>
@@ -77,20 +82,18 @@
             InitializeChart(data);
 
             $("#inputWindowButton").click(function () {
-                console.log("sdijf")
                 $("#hiddenSection").fadeToggle(400);
             });
 
             $("#submitInput").click(function () {
-                console.log("sdijf")
                 $("#hiddenSection").fadeToggle(400);
             });
         };
 
-        dropdown.onchange = function() {
-            var selectedButtonId = this.value;
-            var selectedButton = document.getElementById(selectedButtonId);
-            // do something with the selected button
+        function openPopup() {
+            // Code to open the popup goes here
+            // Replace with your own implementation
+            alert('Popup opened!');
         }
     </script>
 </div>
