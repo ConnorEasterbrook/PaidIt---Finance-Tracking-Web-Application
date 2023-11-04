@@ -1,0 +1,47 @@
+/* INTENDED FOR ALL VARIABLES THAT WILL NEED TO BE GLOBALLY ACCESSED */
+
+// FONTS
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../../content/font/Montserrat-VariableFont_wght.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+$xo-font-title: 'Montserrat', sans-serif;
+
+@font-face {
+    font-family: 'Noto Sans';
+    src: url('../../content/font/NotoSans-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+$xo-font-body: 'Noto Sans', sans-serif;
+
+// COLOURS
+$xo-colour-text: #ffffff !default;
+$xo-colour-muted-text: #dddddd !default;
+$xo-colour-accent: #ffb255 !default;
+$xo-colour-select: #92c397 !default;
+$xo-colour-effect: #879ac7 !default;
+$xo-colour-secondary: #242634 !default;
+$xo-colour-primary: #181920 !default;
+$xo-colour-background: #1e1d1e !default;
+
+/*@media (prefers-color-scheme: light) {
+    $xo-colour-text: #000000 !global;
+    $xo-colour-muted-text: #212121 !global;
+    $xo-colour-accent: #d86363 !global;
+    $xo-colour-select: #879ac7 !global;
+    $xo-colour-effect: #92c397 !global;
+    $xo-colour-secondary: #acbfa4 !global;
+    $xo-colour-primary: #e2e8ce !global;
+    $xo-colour-background: #cccccc !global;
+}*/
+
+// SCREEN SIZE
+$xo-breakpoint-mobile: 425px;
+$xo-breakpoint-tablet: 768px;
+$xo-breakpoint-desktop: 1440px;
+$xo-breakpoint-large: 1920px;
+
+$xo-max-height: 85vh;

@@ -1,0 +1,69 @@
+/* INTENDED FOR SPECIFIC STYLING ON OBJECTS USED ON EVERY PAGE */
+
+@import '../vars.scss';
+
+.core_button {
+
+    @media (min-width: $xo-breakpoint-mobile) {
+        margin: 0.5rem;
+        width: 100%;
+    }
+
+    &.nav-item .nav-link, a {
+        display: block;
+        color: $xo-colour-text;
+        font-weight: bold;
+        letter-spacing: 2px;
+        width: 100%;
+        height: 3vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            color: $xo-colour-background !important;
+        }
+    }
+
+    &:hover {
+        background-color: $xo-colour-select;
+    }
+}
+
+.secondary_button {
+    color: $xo-colour-muted-text;
+    font-weight: bold;
+    letter-spacing: 2px;
+    width: 100%;
+    height: 3vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+
+    @media (max-width: $xo-breakpoint-mobile) {
+        display: none;
+    }
+
+    .secondary_button--selectable {
+        color: $xo-colour-text;
+        pointer-events: all;
+
+        &:hover {
+            font-size: 1.5rem;
+        }
+
+        &.button_focus {
+            color: $xo-colour-accent !important;
+        }
+    }
+}
+
+.button_focus {
+    font-size: 1.5rem;
+    color: $xo-colour-accent;
+
+    a {
+        color: $xo-colour-select !important;
+    }
+}

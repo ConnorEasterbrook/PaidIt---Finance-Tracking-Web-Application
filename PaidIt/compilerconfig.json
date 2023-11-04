@@ -1,0 +1,26 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/scss/hub.css",
+    "inputFile": "wwwroot/css/scss/hub.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/scss/static.css",
+    "inputFile": "wwwroot/css/scss/static.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/scss/vars.css",
+    "inputFile": "wwwroot/css/scss/vars.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/scss/components/core.css",
+    "inputFile": "wwwroot/css/scss/components/core.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/scss/components/portlet.css",
+    "inputFile": "wwwroot/css/scss/components/portlet.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/scss/components/writing.css",
+    "inputFile": "wwwroot/css/scss/components/writing.scss"
+  }
+]
