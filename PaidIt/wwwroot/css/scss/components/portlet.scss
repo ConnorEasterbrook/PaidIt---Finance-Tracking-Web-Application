@@ -1,0 +1,159 @@
+/* INTENDED SPECIFICALLY FOR PORTLET STYLING */
+
+@import '../vars.scss';
+
+.portlet_main {
+    .portlet_head {
+    }
+
+    .portlet_body {
+        background-color: $xo-colour-primary;
+        padding: 2rem;
+        border: solid 1px $xo-colour-select;
+        height: $xo-max-height;
+        overflow-y: scroll;
+        box-shadow: 0 0 2rem #000;
+        width: 100%;
+
+        @media (max-width: $xo-breakpoint-tablet) {
+            padding: 1rem !important;
+
+            .portlet_child-scroll {
+                padding: 0;
+            }
+
+            li {
+                margin: 0;
+            }
+        }
+
+        &.portlet_body--no_scroll {
+
+            @media (min-width: $xo-breakpoint-tablet) {
+                overflow-y: hidden;
+            }
+        }
+
+        &.portlet_body--no_style {
+            position: absolute;
+            left: 0;
+            height: 99%;
+            border: 0;
+            box-shadow: none;
+            background-color: transparent;
+        }
+
+        .portlet_child-scroll {
+            border: solid 1px $xo-colour-select;
+            background-color: $xo-colour-secondary;
+            padding: 1rem;
+            overflow-y: scroll;
+            box-shadow: 0 0 1rem #000;
+
+            li {
+                color: $xo-colour-muted-text;
+                padding: 0;
+            }
+        }
+
+        .portlet_child-grid {
+            display: flex;
+            flex-wrap: wrap;
+            transition: all ease 0.2s;
+            justify-content: center;
+            padding: 0rem 4rem;
+            margin-bottom: 3rem;
+
+            .portlet_child-grid-item {
+                border: solid 2px $xo-colour-select;
+                position: relative;
+                width: 400px;
+                height: 600px;
+                overflow-x: hidden;
+                overflow-y: visible;
+                opacity: 0.5;
+                cursor: pointer;
+                box-shadow: 0 0 1rem #000;
+                animation: fadeInExpand 0.5s;
+                animation-iteration-count: 1;
+                transition: all 0.2s;
+
+                @media (min-width: $xo-breakpoint-mobile) {
+                    margin: 3rem;
+                }
+
+                @media (max-width: $xo-breakpoint-mobile) {
+                    margin: 1rem 0rem;
+                }
+
+                &:hover {
+                    opacity: 1.0;
+                    transform: scale(1.1);
+                }
+
+                *:hover {
+                    transform: scale(1.02);
+                }
+
+                .js_portlet_child-grid-item--filtered {
+
+                    img {
+                        border: solid 1px $xo-colour-select;
+                        padding: 0;
+                        margin-bottom: 10px;
+                        height: 250px;
+                        width: 400px;
+                        object-fit: cover;
+                    }
+                }
+            }
+        }
+
+        .portlet_child-hidden {
+            display: none;
+            border: solid 1px $xo-colour-select;
+            background-color: $xo-colour-secondary;
+            transition: all ease 0s;
+            box-shadow: 0 0 1rem #000;
+            height: 1px;
+        }
+
+        .portlet_child--event_hidden {
+            display: none;
+        }
+
+        .portlet_child-mobile {
+            display: none;
+        }
+
+        @media (max-width: $xo-breakpoint-tablet) {
+            .portlet_child-hiddenText {
+                display: none;
+            }
+
+            .portlet_child-mobile {
+                display: block;
+            }
+
+            .portlet_child-scroll {
+                display: none;
+            }
+        }
+
+        .portlet_list {
+            display: none;
+            list-style: none;
+            padding: 0;
+
+            @media (min-width: $xo-breakpoint-mobile) {
+                display: flex !important;
+            }
+
+            li {
+                width: 100%;
+                margin: 0 0.1rem;
+                border-radius: 0.5rem;
+            }
+        }
+    }
+}

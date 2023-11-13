@@ -1,0 +1,58 @@
+@import '../vars.scss';
+
+.writing-div {
+    h1, h2, h3, h4, h5, h6 {
+        margin: 0;
+    }
+
+    p {
+        padding: 0.5rem;
+    }
+
+    .information {
+        display: none;
+    }
+
+    ul {
+        li {
+            font-weight: normal;
+            padding-bottom: 0.5rem;
+        }
+    }
+
+    &.wd-image {
+        .row {
+            pointer-events: none;
+
+            .col {
+                height: 100px;
+                overflow: hidden;
+
+                img {
+                    max-height: 100%;
+                    width: 100%;
+                    object-fit: contain;
+                    margin: auto;
+                }
+            }
+        }
+    }
+
+    &#info-screen {
+        padding: 1rem;
+        overflow-y: scroll;
+    }
+
+    &.js_hover {
+        padding: 0.5rem;
+        background-color: $xo-colour-primary;
+        box-shadow: 0 0 1rem #000;
+    }
+
+    &.js_noHover {
+        opacity: 0.5;
+    }
+
+    &:hover {
+    }
+}

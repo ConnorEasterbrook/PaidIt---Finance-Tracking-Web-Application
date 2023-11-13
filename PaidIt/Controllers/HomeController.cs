@@ -41,26 +41,12 @@ namespace Paidit.Controllers
         {
             _engine = Python.CreateEngine();
             _scope = _engine.CreateScope();
-            var libraries = new[]
-            {
-                "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\Extensions\\Microsoft\\Python Tools for Visual Studio\\2.2",
-                /*"E:\\Not_Windows\\Code\\IronPython\\Lib",
-                "E:\\Not_Windows\\Code\\IronPython\\DLLs",
-                "E:\\Not_Windows\\Code\\IronPython",
-                "E:\\Not_Windows\\Code\\IronPython\\lib\\site-packages"*/
-                "C:\\Program Files\\IronPython 3.4\\Lib",
-                "C:\\Program Files\\IronPython 3.4\\DLLs",
-                "C:\\Program Files\\IronPython 3.4",
-                "C:\\Program Files\\IronPython 3.4\\lib\\site-packages"
-            };
 
             _userDataPath = Path.Combine(Directory.GetCurrentDirectory(), "userdata.json");
             if(!System.IO.File.Exists(_userDataPath))
             {
                 System.IO.File.WriteAllText(_userDataPath, "{}");
             }
-
-            _engine.SetSearchPaths(libraries);
 
             _pythonPath = Path.Combine(Directory.GetCurrentDirectory(), "PythonScripts", "PythonScript.py");
             _engine.ExecuteFile(_pythonPath, _scope);
