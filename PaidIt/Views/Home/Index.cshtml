@@ -13,16 +13,16 @@
         - Upon account deletion add date data of account being at £0
 *@
 
-<div class="portlet_main">
-    <div class="portlet_head text-center">
-        <h1 class="text-capitalize">PaidIt</h1>
-        <h2>ACCOUNTS</h2>
-        <div id="accountsContainer">
-            <button type="button" onclick="AddAccount()">Add Account</button>
+<div class="portlet_main mt-3">
+    <div class="portlet_body  portlet_body--no_scroll">
+        <div class="text-center">
+            <h1>PAIDIT</h1>
+            <h2>ACCOUNTS</h2>
+            <div id="accountsContainer">
+                <button type="button" id="addAccountBtn" class="secondary_button secondary_button--selectable">Add Account</button>
+            </div>
         </div>
-    </div>
 
-    <div class="portlet_body">
         <div id="accountPopUp">
             <button id="renameButton">Rename</button>
             <button id="deleteButton">Delete</button>
@@ -42,7 +42,7 @@
 
     <button type="button" class="fixedButton" id="inputWindowButton">+</button>
 
-    <div id="hiddenSection">
+    @*<div id="hiddenSection">
         <div class="form-group">
             <label for="accountDropdown">Account Name:</label>
             <select class="form-control" id="accountDropdown"></select>
@@ -68,7 +68,7 @@
                 <button type="submit">Upload</button>
             </form>
         </div>
-    </div>
+    </div>*@
 
     <script>
         var buttonContainer = document.getElementById("accountsContainer");

@@ -1,9 +1,9 @@
 ﻿var chart;
 let accounts = [];
 
-$(document).on('contextmenu', function (e) {
+/*$(document).on('contextmenu', function (e) {
     e.preventDefault(); // Prevent default right-click behavior
-});
+});*/
 
 $('#accountsContainer').on('click', '.account', function () {
     var index = $(this).index() - 1;
@@ -124,8 +124,8 @@ function InitializeChart(data) {
         }
     });
 
-    // Add the accounts to the accounts container
-    const accountsContainer = document.getElementById("accountsContainer");
+    /*// Add the accounts to the accounts container
+    var accountsContainer = document.getElementById("accountsContainer");
     for (var accountName in accounts) {
         const accountData = {
             name: accountName,
@@ -140,8 +140,10 @@ function InitializeChart(data) {
         accountsContainer.appendChild(accountButton);
     }
 
-    UpdateData();
+    UpdateData();*/
 }
+
+$('#addAccountBtn').on('click', AddAccount);
 
 function AddAccount() {
     const accountName = prompt("Enter the name of the account:");
