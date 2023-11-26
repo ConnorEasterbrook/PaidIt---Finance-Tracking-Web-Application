@@ -115,6 +115,29 @@
   * body ul li.small_li {
     font-size: 1rem;
   }
+  * body .bg-accent {
+    background-color: #ffb255;
+  }
+  * body .bg-select {
+    background-color: #92c397;
+    color: #000000;
+    border: 1px solid #242634;
+  }
+  * body .bg-background {
+    background-color: #1e1d1e;
+  }
+  * body .bg-text {
+    background-color: #ffffff;
+  }
+  * body .bg-muted-text {
+    background-color: #dddddd;
+  }
+  * body .bg-primary {
+    background-color: #181920;
+  }
+  * body .bg-secondary {
+    background-color: #242634;
+  }
 }
 @media (max-width: 768px) {
   * body h1 {
@@ -392,14 +415,14 @@
     display: none;
   }
 }
-.secondary_button .secondary_button--selectable {
+.secondary_button.secondary_button--selectable {
   color: #ffffff;
   pointer-events: all;
 }
-.secondary_button .secondary_button--selectable:hover {
+.secondary_button.secondary_button--selectable:hover {
   font-size: 1.5rem;
 }
-.secondary_button .secondary_button--selectable.button_focus {
+.secondary_button.secondary_button--selectable.button_focus {
   color: #ffb255 !important;
 }
 

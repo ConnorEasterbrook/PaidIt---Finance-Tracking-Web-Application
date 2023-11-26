@@ -1,11 +1,9 @@
 ﻿var chart;
 let accounts = [];
 
-/*$(document).on('contextmenu', function (e) {
-    e.preventDefault(); // Prevent default right-click behavior
-});*/
-
-$('#accountsContainer').on('click', '.account', function () {
+$('#accountsContainer').on('click', '.account', function ()
+{
+    console.log("clicked");
     var index = $(this).index() - 1;
     var dataset = chart.data.datasets[index];
     var meta = chart.getDatasetMeta(index);
@@ -124,8 +122,8 @@ function InitializeChart(data) {
         }
     });
 
-    /*// Add the accounts to the accounts container
-    var accountsContainer = document.getElementById("accountsContainer");
+    // Add the accounts to the accounts container
+    var accountsContainer = $('#accountsContainer');
     for (var accountName in accounts) {
         const accountData = {
             name: accountName,
@@ -137,15 +135,17 @@ function InitializeChart(data) {
         };
 
         const accountButton = CreateAccountButton(accountData);
-        accountsContainer.appendChild(accountButton);
+        accountsContainer.append(accountButton);
     }
 
-    UpdateData();*/
+    UpdateData();
 }
 
 $('#addAccountBtn').on('click', AddAccount);
 
-function AddAccount() {
+function AddAccount()
+{
+    console.log("AddAccount");
     const accountName = prompt("Enter the name of the account:");
     if (accountName) {
         // Check if the account already exists
@@ -190,20 +190,20 @@ function AddAccount() {
 }
 
 function CreateAccountButton(account) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.id = "account_button " + account.name;
-    button.className = "account";
-    button.innerText = account.name;
-    button.style.backgroundColor = account.backgroundColor;
-    button.onclick = function () {
-        // do something when the button is clicked
-    };
+    const button = $("<span>", {
+        id: "account_button " + account.name,
+        class: "account",
+        text: account.name,
+        css: {
+            backgroundColor: account.backgroundColor
+        },
+        click: function ()
+        {
+            // do something when the button is clicked
+        }
+    });
 
-    const option = document.createElement("option");
-    option.value = button.id;
-    option.text = account.name;
-    dropdown.appendChild(option);
+    button.addClass('secondary_button').addClass('secondary_button--selectable');
 
     return button;
 }

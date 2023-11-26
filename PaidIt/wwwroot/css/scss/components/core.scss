@@ -45,7 +45,7 @@
         display: none;
     }
 
-    .secondary_button--selectable {
+    &.secondary_button--selectable {
         color: $xo-colour-text;
         pointer-events: all;
 

@@ -104,6 +104,36 @@
                     }
                 }
             }
+
+            .bg-accent {
+                background-color: $xo-colour-accent;
+            }
+
+            .bg-select {
+                background-color: $xo-colour-select;
+                color: $xo-colour-inverted-text;
+                border: 1px solid $xo-colour-secondary;
+            }
+
+            .bg-background {
+                background-color: $xo-colour-background;
+            }
+
+            .bg-text {
+                background-color: $xo-colour-text;
+            }
+
+            .bg-muted-text {
+                background-color: $xo-colour-muted-text;
+            }
+
+            .bg-primary {
+                background-color: $xo-colour-primary;
+            }
+
+            .bg-secondary {
+                background-color: $xo-colour-secondary;
+            }
         }
 
         @media (max-width: $xo-breakpoint-tablet) {
