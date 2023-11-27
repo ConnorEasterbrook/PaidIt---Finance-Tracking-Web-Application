@@ -15,8 +15,7 @@ namespace Paidit.Controllers
         private ScriptEngine? _engine;
         private ScriptScope? _scope;
 
-        private static string _pythonPath;
-        private static string _userDataPath;
+        private static string? _userdataFilePath;
 
         private static dynamic? get_data_from_json;
 
@@ -28,7 +27,12 @@ namespace Paidit.Controllers
         public IActionResult Index()
         {
             EstablishPython();
-            ChartData();
+
+            if(_userdataFilePath != null)
+            {
+                ChartData();
+            }
+
             return View();
         }
 
@@ -42,24 +46,19 @@ namespace Paidit.Controllers
             _engine = Python.CreateEngine();
             _scope = _engine.CreateScope();
 
-            _userDataPath = Path.Combine(Directory.GetCurrentDirectory(), "userdata.json");
-            if(!System.IO.File.Exists(_userDataPath))
+            _userdataFilePath = Path.Combine(Directory.GetCurrentDirectory(), "userdata.json");
+            if(!System.IO.File.Exists(_userdataFilePath))
             {
-                System.IO.File.WriteAllText(_userDataPath, "{}");
+                System.IO.File.WriteAllText(_userdataFilePath, "{}");
             }
 
-            _pythonPath = Path.Combine(Directory.GetCurrentDirectory(), "PythonScripts", "PythonScript.py");
+            string _pythonPath = Path.Combine(Directory.GetCurrentDirectory(), "PythonScripts", "PythonScript.py");
             _engine.ExecuteFile(_pythonPath, _scope);
 
             dynamic read_json_file = _scope.GetVariable("read_json_file");
-            read_json_file(_userDataPath);
+            read_json_file(_userdataFilePath);
 
             get_data_from_json = _scope.GetVariable("get_data_from_json");
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -70,7 +69,7 @@ namespace Paidit.Controllers
 
         public ActionResult ChartData()
         {
-            var jsonData = System.IO.File.ReadAllText(_userDataPath);
+            var jsonData = System.IO.File.ReadAllText(_userdataFilePath);
             var data = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonData);
 
             ViewBag.ChartData = data;
@@ -89,7 +88,7 @@ namespace Paidit.Controllers
             }
 
             dynamic add_bank_account = _scope.GetVariable("add_bank_account");
-            add_bank_account(_userDataPath, accountName);
+            add_bank_account(_userdataFilePath, accountName);
 
             return new EmptyResult();
         }
@@ -106,14 +105,12 @@ namespace Paidit.Controllers
 
             dynamic add_data_to_account = _scope.GetVariable("add_data_to_account");
 
-            Debug.WriteLine("Path: " + _userDataPath);
-            Debug.WriteLine("Account: " + accountName);
-            Debug.WriteLine("Date: " + date);
-            Debug.WriteLine("Amount: " + amount);
+            add_data_to_account(_userdataFilePath, accountName, date, amount);
 
-            add_data_to_account(_userDataPath, accountName, date, amount);
-
-            ChartData();
+            if (_userdataFilePath != null)
+            {
+                ChartData();
+            }
 
             return new EmptyResult();
         }
@@ -126,7 +123,7 @@ namespace Paidit.Controllers
                 return RedirectToAction("Index");
             }
 
-            using (var stream = new FileStream(_userDataPath, FileMode.Create))
+            using (var stream = new FileStream(_userdataFilePath, FileMode.Create))
             {
                 await userdataJSON.CopyToAsync(stream);
             }

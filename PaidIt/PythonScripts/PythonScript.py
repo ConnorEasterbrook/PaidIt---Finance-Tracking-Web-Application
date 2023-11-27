@@ -6,11 +6,8 @@ from datetime import datetime
 ### A basic function to read a json file
 def read_json_file(file_path):
     with open(file_path, 'r') as f:
-        data = json.load(f)
-
-        if "Accounts" not in data:
-            data = {"Accounts": {}}
-            write_json_file(file_path, data)
+        sanity_check_data(file_path)
+        return json.load(f)
 
 ### A basic function to write a json file
 def write_json_file(file_path, data):
@@ -20,8 +17,7 @@ def write_json_file(file_path, data):
 
 ### A basic function to retrieve the data from the json file
 def get_data_from_json(file_path):
-    with open(file_path, "r") as f:
-        data = json.load(f)
+    data = read_json_file(file_path)
 
     json_data = json.dumps(data)
 
@@ -32,8 +28,7 @@ def get_data_from_json(file_path):
 
 ### A basic function to add a new user to the json file
 def add_bank_account(file_path, account_name):
-    with open(file_path, "r") as f:
-        data = json.load(f)
+    data = read_json_file(file_path)
 
     if data is None or "Accounts" not in data:
         data = {"Accounts": {}}
@@ -44,21 +39,28 @@ def add_bank_account(file_path, account_name):
     if account_name not in data["Accounts"]:
         data["Accounts"][account_name] = {}
 
-    if "Inputs" not in data["Accounts"][account_name]:
-        data["Accounts"][account_name]["Inputs"] = []
-
-    if "Colour" not in data["Accounts"][account_name]:
-        random_color = "#{:06x}".format(random.randint(0, 0xFFFFFF))
-        data["Accounts"][account_name]["Colour"] = random_color
-
+    sanity_check_data(file_path)
     write_json_file(file_path, data)
 
-### A basic function to remove a user from the json file
-def remove_bank_account(data, name, account_name):
-    if name in data and account_name in data[name]:
-        del data[name][account_name]
+def sanity_check_data(file_path):
+    with open(file_path, "r") as f:
+        data = json.load(f)
 
-    return data
+    if data is None or "Accounts" not in data:
+        data = {"Accounts": {}}
+
+    if not isinstance(data["Accounts"], dict):
+        return "Error: Accounts must be a dictionary"
+
+    for account_name in data["Accounts"]:
+        if "Inputs" not in data["Accounts"][account_name]:
+            data["Accounts"][account_name]["Inputs"] = []
+
+        if "Colour" not in data["Accounts"][account_name]:
+            random_color = "#{:06x}".format(random.randint(0, 0xFFFFFF))
+            data["Accounts"][account_name]["Colour"] = random_color
+
+    write_json_file(file_path, data)
 
 ### A basic function to add data to a user in the json file
 def add_data_to_account(file_path, account_name, input_date, input_amount):

@@ -157,7 +157,7 @@ function AddAccount()
         const accountData = {
             name: accountName,
             label: accountName,
-            backgroundColor: GetRandomColour(),
+            backgroundColor: '#ffffff',
             data: [],
             borderColor: "#6b6b6b",
             fill: true,
@@ -170,9 +170,7 @@ function AddAccount()
             Inputs: []
         };
 
-        const accountsContainer = document.getElementById("accountsContainer");
-        const accountButton = CreateAccountButton(accountData);
-        accountsContainer.appendChild(accountButton);
+        $('#accountsContainer').append(CreateAccountButton(accountData));
 
         // Make an AJAX request to the SendNewAccount action using jQuery
         $.ajax({
@@ -206,15 +204,6 @@ function CreateAccountButton(account) {
     button.addClass('secondary_button').addClass('secondary_button--selectable');
 
     return button;
-}
-
-function GetRandomColour() {
-    const letters = '0123456789ABCDEF';
-    let colour = '#';
-    for (let i = 0; i < 6; i++) {
-        colour += letters[Math.floor(Math.random() * 16)];
-    }
-    return colour;
 }
 
 function AddData() {
