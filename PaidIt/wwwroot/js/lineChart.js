@@ -1,5 +1,12 @@
 ﻿var chart;
 let accounts = [];
+let previousMonth = 1;
+
+window.onload = function ()
+{
+    const data = $('#accountsContainer').data('chart');
+    InitializeChart(data);
+};
 
 $('#accountsContainer').on('click', '.account', function ()
 {
@@ -253,8 +260,6 @@ function AddData() {
 
     chart.update();
 }
-
-let previousMonth = 1;
 
 function UpdateData(months = 0) {
     if (previousMonth === months) {

@@ -18,7 +18,7 @@
         <div class="text-center">
             <h1>PAIDIT</h1>
             <h2>ACCOUNTS</h2>
-            <div id="accountsContainer" class="portlet_list">
+            <div id="accountsContainer" class="portlet_list" data-chart="@ViewBag.ChartData">
                 <span type="button" id="addAccountBtn" class="secondary_button secondary_button--selectable bg-select">Add Account</span>
             </div>
         </div>
@@ -34,8 +34,6 @@
             <canvas id="myChart" width="600" height="400"></canvas>
         </div>
     </div>
-
-    <button type="button" class="fixedButton" id="inputWindowButton">+</button>
 
     @*<div id="hiddenSection">
         <div class="form-group">
@@ -64,29 +62,8 @@
             </form>
         </div>
     </div>*@
-
-    <script>
-        var buttonContainer = document.getElementById("accountsContainer");
-        var dropdown = document.getElementById("accountDropdown");
-
-        window.onload = function () {
-            var jsonData = '@Html.Raw(Json.Serialize(ViewBag.ChartData))';
-            const data = JSON.parse(jsonData);
-            InitializeChart(data);
-
-            $("#inputWindowButton").click(function () {
-                $("#hiddenSection").fadeToggle(400);
-            });
-
-            $("#submitInput").click(function () {
-                $("#hiddenSection").fadeToggle(400);
-            });
-        };
-
-        function openPopup() {
-            // Code to open the popup goes here
-            // Replace with your own implementation
-            alert('Popup opened!');
-        }
-    </script>
 </div>
+
+@section Scripts {
+    <script src="/js/lineChart.js" asp-append-version="true"></script>
+}

@@ -15,9 +15,7 @@ namespace Paidit.Controllers
         private ScriptEngine? _engine;
         private ScriptScope? _scope;
 
-        private static string? _userdataFilePath;
-
-        private static dynamic? get_data_from_json;
+        private static string _userdataFilePath = "";
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -30,14 +28,10 @@ namespace Paidit.Controllers
 
             if(_userdataFilePath != null)
             {
-                ChartData();
+                var jsonData = System.IO.File.ReadAllText(_userdataFilePath);
+                ViewBag.ChartData = jsonData;
             }
 
-            return View();
-        }
-
-        public IActionResult Goals()
-        {
             return View();
         }
 
@@ -57,8 +51,6 @@ namespace Paidit.Controllers
 
             dynamic read_json_file = _scope.GetVariable("read_json_file");
             read_json_file(_userdataFilePath);
-
-            get_data_from_json = _scope.GetVariable("get_data_from_json");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -67,18 +59,8 @@ namespace Paidit.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public ActionResult ChartData()
-        {
-            var jsonData = System.IO.File.ReadAllText(_userdataFilePath);
-            var data = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonData);
-
-            ViewBag.ChartData = data;
-
-            return View();
-        }
-
         [HttpPost]
-        public ActionResult SendNewAccount(string accountName)
+        public ActionResult SendNewAccountAjax(string accountName)
         {
             EstablishPython();
 
@@ -94,7 +76,7 @@ namespace Paidit.Controllers
         }
 
         [HttpPost]
-        public ActionResult SendNewData(string accountName, string date, int amount)
+        public ActionResult SendNewDataAjax(string accountName, string date, int amount)
         {
             EstablishPython();
 
@@ -109,26 +91,11 @@ namespace Paidit.Controllers
 
             if (_userdataFilePath != null)
             {
-                ChartData();
+                var jsonData = System.IO.File.ReadAllText(_userdataFilePath);
+                ViewBag.ChartData = jsonData;
             }
 
             return new EmptyResult();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> OverwriteUserdata(IFormFile userdataJSON)
-        {
-            if (userdataJSON == null || userdataJSON.Length == 0)
-            {
-                return RedirectToAction("Index");
-            }
-
-            using (var stream = new FileStream(_userdataFilePath, FileMode.Create))
-            {
-                await userdataJSON.CopyToAsync(stream);
-            }
-
-            return RedirectToAction("Index");
         }
     }
 }
