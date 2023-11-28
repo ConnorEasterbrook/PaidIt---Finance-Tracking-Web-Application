@@ -10,7 +10,6 @@ window.onload = function ()
 
 $('#accountsContainer').on('click', '.account', function ()
 {
-    console.log("clicked");
     var index = $(this).index() - 1;
     var dataset = chart.data.datasets[index];
     var meta = chart.getDatasetMeta(index);
@@ -23,7 +22,7 @@ $('#accountsContainer').on('click', '.account', function ()
     meta.hidden = !wasHidden;
 
     if (dataset.hidden) {
-        $(this).css('opacity', '0.5'); 
+        $(this).css('opacity', '0.2'); 
     } else {
         $(this).css('opacity', '1'); 
     }
@@ -33,17 +32,16 @@ $('#accountsContainer').on('click', '.account', function ()
 });
 
 function InitializeChart(data) {
-    accounts = data.Accounts;
     var datasets = [];
 
-    for (var accountName in accounts) {
+    for (var accountName in data.Accounts) {
         // Check if the account has any data
-        if (accounts[accountName].Inputs.length === 0) {
+        if (data.Accounts[accountName].Inputs.length === 0) {
             continue;
         }
 
         // Get the data for the account
-        var accountData = accounts[accountName].Inputs;
+        var accountData = data.Accounts[accountName].Inputs;
         var dataPoints = [];
 
         for (var i = 0; i < accountData.length; i++) {
@@ -56,8 +54,7 @@ function InitializeChart(data) {
         var dataset = {
             label: accountName,
             data: dataPoints,
-            borderColor: "#ffffff",
-            backgroundColor: accounts[accountName].Colour,
+            backgroundColor: data.Accounts[accountName].Colour,
             fill: true,
         };
 
@@ -131,13 +128,13 @@ function InitializeChart(data) {
 
     // Add the accounts to the accounts container
     var accountsContainer = $('#accountsContainer');
-    for (var accountName in accounts) {
+    for (var accountName in data.Accounts) {
         const accountData = {
             name: accountName,
             label: accountName,
-            data: accounts[accountName].Inputs,
+            data: data.Accounts[accountName].Inputs,
             borderColor: "#ffffff",
-            backgroundColor: accounts[accountName].Colour,
+            backgroundColor: data.Accounts[accountName].Colour,
             fill: true,
         };
 
@@ -201,64 +198,12 @@ function CreateAccountButton(account) {
         text: account.name,
         css: {
             backgroundColor: account.backgroundColor
-        },
-        click: function ()
-        {
-            // do something when the button is clicked
         }
     });
 
     button.addClass('secondary_button').addClass('secondary_button--selectable');
 
     return button;
-}
-
-function AddData() {
-    const accountName = dropdown.options[dropdown.selectedIndex].text
-    const amount = parseFloat(document.getElementById("amount").value);
-    const date = document.getElementById("date").value;
-
-    const accountIndex = chart.data.datasets.findIndex(dataset => dataset.label === accountName);
-    if (accountIndex === -1) {
-        alert(`Account ${accountName} does not exist`);
-        return;
-    }
-
-    if (isNaN(amount)) {
-        alert("Please enter a valid amount");
-        return;
-    }
-
-    const parsedDate = Date.parse(date);
-    if (isNaN(parsedDate)) {
-        alert("Please enter a valid date");
-        return;
-    }
-
-    const accountData = chart.data.datasets[accountIndex].data;
-    const index = accountData.findIndex(data => data.x === parsedDate);
-    if (index !== -1) {
-        accountData[index].y += amount;
-    } else {
-        accountData.push({ x: parsedDate, y: amount });
-    }
-
-    console.log(accountName, amount, date);
-
-    // Make an AJAX request to the SendNewData action using jQuery
-    $.ajax({
-        url: "/Home/SendNewData",
-        type: "POST",
-        data: { accountName: accountName, date: date, amount: amount },
-        success: function (result) {
-            alert("Success");
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            alert("An error occurred while calling the C# function.");
-        }
-    });
-
-    chart.update();
 }
 
 function UpdateData(months = 0) {
