@@ -14,21 +14,27 @@
 *@
 
 <div class="portlet_main mt-3">
-    <div class="portlet_body  portlet_body--no_scroll">
-        <div class="text-center">
-            <h1>PAIDIT</h1>
-            <h2>ACCOUNTS</h2>
-            <div id="accountsContainer" class="portlet_list" data-chart="@ViewBag.ChartData">
-                <span type="button" id="addAccountBtn" class="secondary_button secondary_button--selectable bg-select">Add Account</span>
+    <div class="portlet_body  portlet_body--no_scroll text-center">
+        <h1>PAIDIT</h1>
+        <h2>ACCOUNTS</h2>
+
+        <div class="portlet_child-centrepiece">
+            <span type="button" id="addAccountBtn" class="secondary_button secondary_button--selectable bg-select">Add Account</span>
+            <div id="accountsContainer" class="portlet_list" data-chart="@ViewBag.ChartData"></div>
+            <div id="chart">
+                <canvas id="myChart"></canvas>
             </div>
         </div>
 
-        <div id="chart">
-            <canvas id="myChart" width="600" height="400"></canvas>
-        </div>
+        <h2>Test</h2>
     </div>
 </div>
 
 @section Scripts {
-    <script src="/js/lineChart.js" asp-append-version="true"></script>
+    <environment include="Development">
+        <script src="/js/chart.accounts.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="/js/chart.accounts.min.js" asp-append-version="true"></script>
+    </environment>
 }

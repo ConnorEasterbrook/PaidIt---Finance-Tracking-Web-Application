@@ -152,7 +152,21 @@
             li {
                 width: 100%;
                 margin: 0 0.1rem;
-                border-radius: 0.5rem;
+            }
+        }
+
+        .portlet_child-centrepiece {
+            background-color: $xo-colour-secondary;
+            margin: auto;
+            padding: 1rem;
+            border: solid 1px $xo-colour-select;
+
+            @media (min-width: $xo-breakpoint-tablet) {
+                width: 50%;
+            }
+
+            @media (max-width: $xo-breakpoint-tablet) {
+                width: 100%;
             }
         }
     }
