@@ -26,5 +26,9 @@
   {
     "outputFile": "wwwroot/js/chart.accounts.es5.js",
     "inputFile": "wwwroot/js/chart.accounts.js"
+  },
+  {
+    "outputFile": "wwwroot/js/chartjs.es5.js",
+    "inputFile": "wwwroot/js/chartjs.js"
   }
 ]
