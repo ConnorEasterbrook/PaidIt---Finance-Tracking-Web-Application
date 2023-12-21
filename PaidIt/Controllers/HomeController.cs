@@ -12,10 +12,13 @@ namespace Paidit.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private ScriptScope scope;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+
+            scope = EstablishPython();
         }
 
         public IActionResult Index()
@@ -52,10 +55,8 @@ namespace Paidit.Controllers
         }
 
         [HttpPost]
-        public ActionResult SendNewAccountAjax(string accountName)
+        public ActionResult AddNewAccountAjax(string accountName)
         {
-            ScriptScope scope = EstablishPython();
-
             if(scope == null)
             {
                 return new EmptyResult();
@@ -70,8 +71,6 @@ namespace Paidit.Controllers
         [HttpPost]
         public ActionResult SendNewDataAjax(string accountName, string date, int amount)
         {
-            ScriptScope scope = EstablishPython();
-
             if(scope == null)
             {
                 return new EmptyResult();

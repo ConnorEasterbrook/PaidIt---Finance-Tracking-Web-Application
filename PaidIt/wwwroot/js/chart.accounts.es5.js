@@ -1,15 +1,17 @@
-﻿var chart;
-let accounts = [];
-let previousMonth = 1;
+﻿'use strict';
 
-window.onload = function ()
-{
-    const data = $('#accountsContainer').data('chart');
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
+var chart;
+var accounts = [];
+var previousMonth = 1;
+
+window.onload = function () {
+    var data = $('#accountsContainer').data('chart');
     InitializeChart(data);
 };
 
-$('#accountsContainer').on('click', '.account_button', function ()
-{
+$('#accountsContainer').on('click', '.account_button', function () {
     var index = $(this).index();
     var dataset = chart.data.datasets[index];
     var meta = chart.getDatasetMeta(index);
@@ -22,9 +24,9 @@ $('#accountsContainer').on('click', '.account_button', function ()
     meta.hidden = !wasHidden;
 
     if (dataset.hidden) {
-        $(this).css('opacity', '0.2'); 
+        $(this).css('opacity', '0.2');
     } else {
-        $(this).css('opacity', '1'); 
+        $(this).css('opacity', '1');
     }
 
     // Update chart
@@ -55,7 +57,7 @@ function InitializeChart(data) {
             label: accountName,
             data: dataPoints,
             backgroundColor: data.Accounts[accountName].Colour,
-            fill: true,
+            fill: true
         };
 
         datasets.push(dataset);
@@ -65,7 +67,7 @@ function InitializeChart(data) {
         type: 'line',
         data: {
             labels: [],
-            datasets: datasets,
+            datasets: datasets
         },
         options: {
             responsive: true,
@@ -97,7 +99,7 @@ function InitializeChart(data) {
                     },
                     ticks: {
                         font: {
-                            size: 20,
+                            size: 20
                         },
                         color: 'rgb(209, 209, 209)'
                     }
@@ -113,8 +115,8 @@ function InitializeChart(data) {
                         }
                     },
                     ticks: {
-                        callback: function (value, index, values) {
-                                return '£' + value;
+                        callback: function callback(value, index, values) {
+                            return '£' + value;
                         },
                         font: {
                             size: 20
@@ -129,16 +131,16 @@ function InitializeChart(data) {
     // Add the accounts to the accounts container
     var accountsContainer = $('#accountsContainer');
     for (var accountName in data.Accounts) {
-        const accountData = {
+        var _accountData = {
             name: accountName,
             label: accountName,
             data: data.Accounts[accountName].Inputs,
             borderColor: "#ffffff",
             backgroundColor: data.Accounts[accountName].Colour,
-            fill: true,
+            fill: true
         };
 
-        const accountButton = CreateAccountButton(accountData);
+        var accountButton = CreateAccountButton(_accountData);
         accountsContainer.append(accountButton);
     }
 
@@ -147,10 +149,9 @@ function InitializeChart(data) {
 
 $('#addAccountBtn').on('click', AddAccount);
 
-function AddAccount()
-{
+function AddAccount() {
     console.log("AddAccount");
-    const accountName = prompt("Enter the name of the account:");
+    var accountName = prompt("Enter the name of the account:");
     if (accountName) {
         // Check if the account already exists
         if (accounts[accountName]) {
@@ -158,13 +159,13 @@ function AddAccount()
             return;
         }
 
-        const accountData = {
+        var accountData = {
             name: accountName,
             label: accountName,
             backgroundColor: '#ffffff',
             data: [],
             borderColor: "#6b6b6b",
-            fill: true,
+            fill: true
         };
         chart.data.datasets.push(accountData);
         chart.update();
@@ -181,10 +182,10 @@ function AddAccount()
             url: "/Home/AddNewAccountAjax",
             type: "POST",
             data: { accountName: accountName },
-            success: function (result) {
+            success: function success(result) {
                 alert("Success");
             },
-            error: function (xhr, textStatus, errorThrown) {
+            error: function error(xhr, textStatus, errorThrown) {
                 alert("An error occurred while calling the C# function.");
             }
         });
@@ -192,9 +193,9 @@ function AddAccount()
 }
 
 function CreateAccountButton(account) {
-    const button = $("<span>", {
+    var button = $("<span>", {
         id: "account_button-" + account.name,
-        class: "account_button",
+        'class': "account_button",
         text: account.name,
         css: {
             backgroundColor: account.backgroundColor
@@ -206,31 +207,42 @@ function CreateAccountButton(account) {
     return button;
 }
 
-function UpdateData(months = 0) {
+function UpdateData() {
+    var months = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
     if (previousMonth === months) {
         return;
     }
     previousMonth = months;
 
     // Calculate the earliest and latest dates in the datasets
-    let startDate = new Date(Math.min(...chart.data.datasets.flatMap((dataset) => dataset.data.map((data) => new Date(data.x).getTime()))));
-    let endDate = new Date(Math.max(...chart.data.datasets.flatMap((dataset) => dataset.data.map((data) => new Date(data.x).getTime()))));
-
+    var startDate = new Date(Math.min.apply(Math, _toConsumableArray(chart.data.datasets.flatMap(function (dataset) {
+        return dataset.data.map(function (data) {
+            return new Date(data.x).getTime();
+        });
+    }))));
+    var endDate = new Date(Math.max.apply(Math, _toConsumableArray(chart.data.datasets.flatMap(function (dataset) {
+        return dataset.data.map(function (data) {
+            return new Date(data.x).getTime();
+        });
+    }))));
 
     // Update the labels on the x-axis based on the selected time span
     chart.data.labels = GetMonthLabels(startDate, endDate);
 
     // Fill in any missing data points
-    chart.data.datasets.forEach((dataset) => {
-        const newData = [];
+    chart.data.datasets.forEach(function (dataset) {
+        var newData = [];
 
-        chart.data.labels.forEach((label) => {
+        chart.data.labels.forEach(function (label) {
             // Try to find an existing data point
-            const dataPoint = dataset.data.find((data) => new Date(data.x).toLocaleString('default', { month: 'long', year: 'numeric' }) === label);
-            const x = new Date(label);
-            const y = dataPoint ? dataPoint.y : (newData.length > 0 ? newData[newData.length - 1].y : 0);
+            var dataPoint = dataset.data.find(function (data) {
+                return new Date(data.x).toLocaleString('default', { month: 'long', year: 'numeric' }) === label;
+            });
+            var x = new Date(label);
+            var y = dataPoint ? dataPoint.y : newData.length > 0 ? newData[newData.length - 1].y : 0;
 
-            newData.push({ x, y });
+            newData.push({ x: x, y: y });
         });
 
         dataset.data = newData;
@@ -241,11 +253,12 @@ function UpdateData(months = 0) {
 }
 
 function GetMonthLabels(startDate, endDate) {
-    const labels = [];
+    var labels = [];
 
-    for (let d = startDate; d <= endDate; d.setMonth(d.getMonth() + 1)) {
+    for (var d = startDate; d <= endDate; d.setMonth(d.getMonth() + 1)) {
         labels.push(d.toLocaleString('default', { month: 'long', year: 'numeric' }));
     }
 
     return labels;
 }
+

@@ -12,12 +12,6 @@
     ]
   },
   {
-    "outputFileName": "wwwroot/js/inputMenu.min.js",
-    "inputFiles": [
-      "wwwroot/js/inputMenu.js"
-    ]
-  },
-  {
     "outputFileName": "wwwroot/js/chartjs.min.js",
     "inputFiles": [
       "wwwroot/js/chartjs.js"
