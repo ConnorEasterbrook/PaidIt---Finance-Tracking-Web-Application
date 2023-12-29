@@ -111,3 +111,15 @@ def add_data_to_account(file_path, account_name, input_date, input_amount):
     write_json_file(file_path, data)
 
     return "Success"
+
+### A basic function to get only the account names from the json file
+def get_account_names(file_path):
+    data = read_json_file(file_path)
+
+    if data is None:
+        return "Error reading JSON file"
+
+    if not data["Accounts"]:
+        return "No accounts found"
+
+    return data["Accounts"].keys()

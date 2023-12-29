@@ -157,12 +157,12 @@
   padding: 1rem;
   border: solid 1px #92c397;
 }
-@media (min-width: 768px) {
+@media (min-width: 1440px) {
   .portlet_main .portlet_body .portlet_child-centrepiece {
-    width: 50%;
+    width: 60%;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 1440px) {
   .portlet_main .portlet_body .portlet_child-centrepiece {
     width: 100%;
   }

@@ -115,27 +115,27 @@
   * body ul li.small_li {
     font-size: 1rem;
   }
-  * body .bg-accent {
+  * body .bg-xo_accent {
     background-color: #ffb255;
   }
-  * body .bg-select {
+  * body .bg-xo_select {
     background-color: #92c397;
     color: #000000;
     border: 1px solid #242634;
   }
-  * body .bg-background {
+  * body .bg-xo_background {
     background-color: #1e1d1e;
   }
-  * body .bg-text {
+  * body .bg-xo_text {
     background-color: #ffffff;
   }
-  * body .bg-muted-text {
+  * body .bg-xo_muted-text {
     background-color: #dddddd;
   }
-  * body .bg-primary {
+  * body .bg-xo_primary {
     background-color: #181920;
   }
-  * body .bg-secondary {
+  * body .bg-xo_secondary {
     background-color: #242634;
   }
 }

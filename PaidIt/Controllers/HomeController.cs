@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Scripting.Hosting;
 using Paidit.Configuration;
 using Paidit.Models;
+using Paidit.Models.Home;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -31,7 +32,24 @@ namespace Paidit.Controllers
             var jsonData = System.IO.File.ReadAllText(SiteConstants.UserdataFilePath);
             ViewBag.ChartData = jsonData;
 
-            return View();
+            // Get all account names from the JSON file
+            dynamic get_account_names = scope.GetVariable("get_account_names");
+            var accountNames = get_account_names(SiteConstants.UserdataFilePath);
+
+            HomeViewModel model = new HomeViewModel();
+
+            List<string> foo = new List<string>();
+
+            foreach(var accountName in accountNames)
+            {
+                foo.Add(accountName);
+            }
+
+            model.AccountNames = foo;
+
+            
+
+            return View(model);
         }
 
         private ScriptScope EstablishPython()

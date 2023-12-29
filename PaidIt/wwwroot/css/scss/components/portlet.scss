@@ -161,11 +161,11 @@
             padding: 1rem;
             border: solid 1px $xo-colour-select;
 
-            @media (min-width: $xo-breakpoint-tablet) {
-                width: 50%;
+            @media (min-width: $xo-breakpoint-desktop) {
+                width: 60%;
             }
 
-            @media (max-width: $xo-breakpoint-tablet) {
+            @media (max-width: $xo-breakpoint-desktop) {
                 width: 100%;
             }
         }

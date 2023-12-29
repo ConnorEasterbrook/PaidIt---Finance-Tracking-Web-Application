@@ -11,28 +11,6 @@ window.onload = function () {
     InitializeChart(data);
 };
 
-$('#accountsContainer').on('click', '.account_button', function () {
-    var index = $(this).index();
-    var dataset = chart.data.datasets[index];
-    var meta = chart.getDatasetMeta(index);
-
-    // See if this dataset is hidden
-    var wasHidden = meta.hidden === null ? dataset.hidden : meta.hidden;
-
-    // Toggle visibility
-    dataset.hidden = !wasHidden;
-    meta.hidden = !wasHidden;
-
-    if (dataset.hidden) {
-        $(this).css('opacity', '0.2');
-    } else {
-        $(this).css('opacity', '1');
-    }
-
-    // Update chart
-    chart.update();
-});
-
 function InitializeChart(data) {
     var datasets = [];
 
@@ -260,5 +238,51 @@ function GetMonthLabels(startDate, endDate) {
     }
 
     return labels;
+}
+
+$(document).on('click', '.account_button', accountButtonClicked);
+$('#editAccountBtn').on('click', editAccount);
+
+function accountButtonClicked() {
+    var index = $(this).index();
+
+    if (index >= chart.data.datasets.length) {
+        return;
+    }
+
+    var dataset = chart.data.datasets[index];
+    var meta = chart.getDatasetMeta(index);
+
+    // See if this dataset is hidden
+    var wasHidden = meta.hidden === null ? dataset.hidden : meta.hidden;
+
+    // Toggle visibility
+    dataset.hidden = !wasHidden;
+    meta.hidden = !wasHidden;
+
+    if (dataset.hidden) {
+        $(this).css('opacity', '0.2');
+    } else {
+        $(this).css('opacity', '1');
+    }
+
+    // Update chart
+    chart.update();
+}
+
+function editAccount() {
+    $('#editAccountCover').removeClass('d-none');
+    $('#primaryChart').addClass('d-none');
+
+    // Create a dropdown menu that contains all of the accounts
+    var dropdown = $('#editAccountDropdown');
+    dropdown.empty();
+    for (var accountName in accounts) {
+        var option = $('<option>', {
+            value: accountName,
+            text: accountName
+        });
+        dropdown.append(option);
+    }
 }
 

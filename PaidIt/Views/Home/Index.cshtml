@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Paidit.Models.Home.HomeViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -28,15 +30,23 @@
         <h1>PAIDIT</h1>
         <h2>ACCOUNTS</h2>
 
-        <div class="portlet_child-centrepiece">
-            <span type="button" id="addAccountBtn" class="secondary_button secondary_button--selectable bg-select">Add Account</span>
+        <div id="primaryChart" class="portlet_child-centrepiece">
+            <span type="button" id="addAccountBtn" class="secondary_button secondary_button--selectable bg-xo_select">Add Account</span>
             <div id="accountsContainer" class="portlet_list" data-chart="@ViewBag.ChartData"></div>
             <div id="chart">
                 <canvas id="myChart"></canvas>
             </div>
         </div>
 
-        <h2>Test</h2>
+        <div id="editAccountCover" class="portlet_child-centrepiece d-none">
+            <h2>Test</h2>
+            <select id="editAccountDropdown" class="form-control">
+            </select>
+        </div>
+
+        <div>
+            <span type="button" id="editAccountBtn" class="secondary_button secondary_button--selectable bg-xo_secondary">Edit Accounts</span>
+        </div>
     </div>
 </div>
 

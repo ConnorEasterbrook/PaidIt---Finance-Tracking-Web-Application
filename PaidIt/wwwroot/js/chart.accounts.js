@@ -2,34 +2,10 @@
 let accounts = [];
 let previousMonth = 1;
 
-window.onload = function ()
-{
+window.onload = function () {
     const data = $('#accountsContainer').data('chart');
     InitializeChart(data);
 };
-
-$('#accountsContainer').on('click', '.account_button', function ()
-{
-    var index = $(this).index();
-    var dataset = chart.data.datasets[index];
-    var meta = chart.getDatasetMeta(index);
-
-    // See if this dataset is hidden
-    var wasHidden = meta.hidden === null ? dataset.hidden : meta.hidden;
-
-    // Toggle visibility
-    dataset.hidden = !wasHidden;
-    meta.hidden = !wasHidden;
-
-    if (dataset.hidden) {
-        $(this).css('opacity', '0.2'); 
-    } else {
-        $(this).css('opacity', '1'); 
-    }
-
-    // Update chart
-    chart.update();
-});
 
 function InitializeChart(data) {
     var datasets = [];
@@ -114,7 +90,7 @@ function InitializeChart(data) {
                     },
                     ticks: {
                         callback: function (value, index, values) {
-                                return '£' + value;
+                            return '£' + value;
                         },
                         font: {
                             size: 20
@@ -147,8 +123,7 @@ function InitializeChart(data) {
 
 $('#addAccountBtn').on('click', AddAccount);
 
-function AddAccount()
-{
+function AddAccount() {
     console.log("AddAccount");
     const accountName = prompt("Enter the name of the account:");
     if (accountName) {
@@ -248,4 +223,50 @@ function GetMonthLabels(startDate, endDate) {
     }
 
     return labels;
+}
+
+$(document).on('click', '.account_button', accountButtonClicked);
+$('#editAccountBtn').on('click', editAccount);
+
+function accountButtonClicked() {
+    var index = $(this).index();
+
+    if (index >= chart.data.datasets.length) {
+        return;
+    }
+
+    var dataset = chart.data.datasets[index];
+    var meta = chart.getDatasetMeta(index);
+
+    // See if this dataset is hidden
+    var wasHidden = meta.hidden === null ? dataset.hidden : meta.hidden;
+
+    // Toggle visibility
+    dataset.hidden = !wasHidden;
+    meta.hidden = !wasHidden;
+
+    if (dataset.hidden) {
+        $(this).css('opacity', '0.2');
+    } else {
+        $(this).css('opacity', '1');
+    }
+
+    // Update chart
+    chart.update();
+}
+
+function editAccount() {
+    $('#editAccountCover').removeClass('d-none');
+    $('#primaryChart').addClass('d-none');
+
+    // Create a dropdown menu that contains all of the accounts
+    const dropdown = $('#editAccountDropdown');
+    dropdown.empty();
+    for (const accountName in accounts) {
+        const option = $('<option>', {
+            value: accountName,
+            text: accountName
+        });
+        dropdown.append(option);
+    }
 }
