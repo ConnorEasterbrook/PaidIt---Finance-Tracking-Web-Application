@@ -2,6 +2,6 @@
 {
     public class HomeViewModel
     {
-        public List<string> AccountNames { get; set; }
+        public List<string>? AccountNames { get; set; }
     }
 }

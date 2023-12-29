@@ -39,9 +39,22 @@
         </div>
 
         <div id="editAccountCover" class="portlet_child-centrepiece d-none">
-            <h2>Test</h2>
-            <select id="editAccountDropdown" class="form-control">
-            </select>
+            <div class="form-group">
+                @if(Model.AccountNames.Count > 0)
+                {
+                    <label for="accountSelect">Select Account</label>
+                    <select class="form-control" id="accountSelect">
+                        @foreach(var account in Model.AccountNames)
+                        {
+                            <option class="bg-black">@account</option>
+                        }
+                    </select>
+                }
+                else
+                {
+                    <p>No accounts to edit</p>
+                }
+            </div>
         </div>
 
         <div>

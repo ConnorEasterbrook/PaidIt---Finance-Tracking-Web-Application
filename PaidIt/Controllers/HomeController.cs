@@ -5,8 +5,6 @@ using Paidit.Configuration;
 using Paidit.Models;
 using Paidit.Models.Home;
 using System.Diagnostics;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Paidit.Controllers
 {
@@ -32,22 +30,19 @@ namespace Paidit.Controllers
             var jsonData = System.IO.File.ReadAllText(SiteConstants.UserdataFilePath);
             ViewBag.ChartData = jsonData;
 
-            // Get all account names from the JSON file
-            dynamic get_account_names = scope.GetVariable("get_account_names");
-            var accountNames = get_account_names(SiteConstants.UserdataFilePath);
+            dynamic get_data_from_json = scope.GetVariable("get_data_from_json");
+            var data = get_data_from_json(SiteConstants.UserdataFilePath);
 
-            HomeViewModel model = new HomeViewModel();
-
-            List<string> foo = new List<string>();
-
-            foreach(var accountName in accountNames)
+            var accounts = new List<string>();
+            foreach(var account in data)
             {
-                foo.Add(accountName);
+                accounts.Add(account);
             }
 
-            model.AccountNames = foo;
-
-            
+            HomeViewModel model = new HomeViewModel
+            {
+                AccountNames = accounts
+            };
 
             return View(model);
         }

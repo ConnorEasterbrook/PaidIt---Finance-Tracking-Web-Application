@@ -53,16 +53,18 @@ def sort_data(data):
     data["Accounts"] = sorted_accounts
     return data
 
-### A basic function to retrieve the data from the json file
+### A basic function to retrieve all data from the json file under the "Accounts" key
 def get_data_from_json(file_path):
     data = read_json_file(file_path)
-
-    json_data = json.dumps(data)
-
-    url = "Home/ChartData"
-    headers = {"Content-Type": "application/json"}
-    req = urllib.Request(url, json_data, headers)
-    response = urllib.urlopen(req)
+    
+    if data is None:
+        return "Error reading JSON file"
+    
+    if not data["Accounts"]:
+        return "No accounts found"
+    
+    return data["Accounts"]
+    
 
 ### A basic function to add a new user to the json file
 def add_bank_account(file_path, account_name):
@@ -111,15 +113,3 @@ def add_data_to_account(file_path, account_name, input_date, input_amount):
     write_json_file(file_path, data)
 
     return "Success"
-
-### A basic function to get only the account names from the json file
-def get_account_names(file_path):
-    data = read_json_file(file_path)
-
-    if data is None:
-        return "Error reading JSON file"
-
-    if not data["Accounts"]:
-        return "No accounts found"
-
-    return data["Accounts"].keys()
