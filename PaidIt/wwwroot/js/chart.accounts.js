@@ -1,44 +1,23 @@
 ﻿var chart;
 let accounts = [];
+let previousMonth = 1;
 
-$(document).on('contextmenu', function (e) {
-    e.preventDefault(); // Prevent default right-click behavior
-});
-
-$('#accountsContainer').on('click', '.account', function () {
-    var index = $(this).index() - 1;
-    var dataset = chart.data.datasets[index];
-    var meta = chart.getDatasetMeta(index);
-
-    // See if this dataset is hidden
-    var wasHidden = meta.hidden === null ? dataset.hidden : meta.hidden;
-
-    // Toggle visibility
-    dataset.hidden = !wasHidden;
-    meta.hidden = !wasHidden;
-
-    if (dataset.hidden) {
-        $(this).css('opacity', '0.5'); 
-    } else {
-        $(this).css('opacity', '1'); 
-    }
-
-    // Update chart
-    chart.update();
-});
+window.onload = function () {
+    const data = $('#accountsContainer').data('chart');
+    InitializeChart(data);
+};
 
 function InitializeChart(data) {
-    accounts = data.Accounts;
     var datasets = [];
 
-    for (var accountName in accounts) {
+    for (var accountName in data.Accounts) {
         // Check if the account has any data
-        if (accounts[accountName].Inputs.length === 0) {
+        if (data.Accounts[accountName].Inputs.length === 0) {
             continue;
         }
 
         // Get the data for the account
-        var accountData = accounts[accountName].Inputs;
+        var accountData = data.Accounts[accountName].Inputs;
         var dataPoints = [];
 
         for (var i = 0; i < accountData.length; i++) {
@@ -51,8 +30,7 @@ function InitializeChart(data) {
         var dataset = {
             label: accountName,
             data: dataPoints,
-            borderColor: "#ffffff",
-            backgroundColor: accounts[accountName].Colour,
+            backgroundColor: data.Accounts[accountName].Colour,
             fill: true,
         };
 
@@ -112,7 +90,7 @@ function InitializeChart(data) {
                     },
                     ticks: {
                         callback: function (value, index, values) {
-                                return '£' + value;
+                            return '£' + value;
                         },
                         font: {
                             size: 20
@@ -125,25 +103,28 @@ function InitializeChart(data) {
     });
 
     // Add the accounts to the accounts container
-    const accountsContainer = document.getElementById("accountsContainer");
-    for (var accountName in accounts) {
+    var accountsContainer = $('#accountsContainer');
+    for (var accountName in data.Accounts) {
         const accountData = {
             name: accountName,
             label: accountName,
-            data: accounts[accountName].Inputs,
+            data: data.Accounts[accountName].Inputs,
             borderColor: "#ffffff",
-            backgroundColor: accounts[accountName].Colour,
+            backgroundColor: data.Accounts[accountName].Colour,
             fill: true,
         };
 
         const accountButton = CreateAccountButton(accountData);
-        accountsContainer.appendChild(accountButton);
+        accountsContainer.append(accountButton);
     }
 
     UpdateData();
 }
 
+$('#addAccountBtn').on('click', AddAccount);
+
 function AddAccount() {
+    console.log("AddAccount");
     const accountName = prompt("Enter the name of the account:");
     if (accountName) {
         // Check if the account already exists
@@ -155,7 +136,7 @@ function AddAccount() {
         const accountData = {
             name: accountName,
             label: accountName,
-            backgroundColor: GetRandomColour(),
+            backgroundColor: '#ffffff',
             data: [],
             borderColor: "#6b6b6b",
             fill: true,
@@ -168,13 +149,11 @@ function AddAccount() {
             Inputs: []
         };
 
-        const accountsContainer = document.getElementById("accountsContainer");
-        const accountButton = CreateAccountButton(accountData);
-        accountsContainer.appendChild(accountButton);
+        $('#accountsContainer').append(CreateAccountButton(accountData));
 
         // Make an AJAX request to the SendNewAccount action using jQuery
         $.ajax({
-            url: "/Home/SendNewAccount",
+            url: "/Home/AddNewAccountAjax",
             type: "POST",
             data: { accountName: accountName },
             success: function (result) {
@@ -188,82 +167,19 @@ function AddAccount() {
 }
 
 function CreateAccountButton(account) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.id = "account_button " + account.name;
-    button.className = "account";
-    button.innerText = account.name;
-    button.style.backgroundColor = account.backgroundColor;
-    button.onclick = function () {
-        // do something when the button is clicked
-    };
-
-    const option = document.createElement("option");
-    option.value = button.id;
-    option.text = account.name;
-    dropdown.appendChild(option);
-
-    return button;
-}
-
-function GetRandomColour() {
-    const letters = '0123456789ABCDEF';
-    let colour = '#';
-    for (let i = 0; i < 6; i++) {
-        colour += letters[Math.floor(Math.random() * 16)];
-    }
-    return colour;
-}
-
-function AddData() {
-    const accountName = dropdown.options[dropdown.selectedIndex].text
-    const amount = parseFloat(document.getElementById("amount").value);
-    const date = document.getElementById("date").value;
-
-    const accountIndex = chart.data.datasets.findIndex(dataset => dataset.label === accountName);
-    if (accountIndex === -1) {
-        alert(`Account ${accountName} does not exist`);
-        return;
-    }
-
-    if (isNaN(amount)) {
-        alert("Please enter a valid amount");
-        return;
-    }
-
-    const parsedDate = Date.parse(date);
-    if (isNaN(parsedDate)) {
-        alert("Please enter a valid date");
-        return;
-    }
-
-    const accountData = chart.data.datasets[accountIndex].data;
-    const index = accountData.findIndex(data => data.x === parsedDate);
-    if (index !== -1) {
-        accountData[index].y += amount;
-    } else {
-        accountData.push({ x: parsedDate, y: amount });
-    }
-
-    console.log(accountName, amount, date);
-
-    // Make an AJAX request to the SendNewData action using jQuery
-    $.ajax({
-        url: "/Home/SendNewData",
-        type: "POST",
-        data: { accountName: accountName, date: date, amount: amount },
-        success: function (result) {
-            alert("Success");
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            alert("An error occurred while calling the C# function.");
+    const button = $("<span>", {
+        id: "account_button-" + account.name,
+        class: "account_button",
+        text: account.name,
+        css: {
+            backgroundColor: account.backgroundColor
         }
     });
 
-    chart.update();
-}
+    button.addClass('secondary_button').addClass('secondary_button--selectable');
 
-let previousMonth = 1;
+    return button;
+}
 
 function UpdateData(months = 0) {
     if (previousMonth === months) {
@@ -307,4 +223,50 @@ function GetMonthLabels(startDate, endDate) {
     }
 
     return labels;
+}
+
+$(document).on('click', '.account_button', accountButtonClicked);
+$('#editAccountBtn').on('click', editAccount);
+
+function accountButtonClicked() {
+    var index = $(this).index();
+
+    if (index >= chart.data.datasets.length) {
+        return;
+    }
+
+    var dataset = chart.data.datasets[index];
+    var meta = chart.getDatasetMeta(index);
+
+    // See if this dataset is hidden
+    var wasHidden = meta.hidden === null ? dataset.hidden : meta.hidden;
+
+    // Toggle visibility
+    dataset.hidden = !wasHidden;
+    meta.hidden = !wasHidden;
+
+    if (dataset.hidden) {
+        $(this).css('opacity', '0.2');
+    } else {
+        $(this).css('opacity', '1');
+    }
+
+    // Update chart
+    chart.update();
+}
+
+function editAccount() {
+    $('#editAccountCover').removeClass('d-none');
+    $('#primaryChart').addClass('d-none');
+
+    // Create a dropdown menu that contains all of the accounts
+    const dropdown = $('#editAccountDropdown');
+    dropdown.empty();
+    for (const accountName in accounts) {
+        const option = $('<option>', {
+            value: accountName,
+            text: accountName
+        });
+        dropdown.append(option);
+    }
 }

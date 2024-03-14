@@ -1,65 +1,64 @@
 ﻿using IronPython.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Scripting.Hosting;
+using Paidit.Configuration;
 using Paidit.Models;
+using Paidit.Models.Home;
 using System.Diagnostics;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Paidit.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        private ScriptEngine? _engine;
-        private ScriptScope? _scope;
-
-        private static string _pythonPath;
-        private static string _userDataPath;
-
-        private static dynamic? get_data_from_json;
+        private ScriptScope scope;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+
+            scope = EstablishPython();
         }
 
         public IActionResult Index()
         {
-            EstablishPython();
-            ChartData();
-            return View();
-        }
-
-        public IActionResult Goals()
-        {
-            return View();
-        }
-
-        private void EstablishPython()
-        {
-            _engine = Python.CreateEngine();
-            _scope = _engine.CreateScope();
-
-            _userDataPath = Path.Combine(Directory.GetCurrentDirectory(), "userdata.json");
-            if(!System.IO.File.Exists(_userDataPath))
+            if(!System.IO.File.Exists(SiteConstants.UserdataFilePath))
             {
-                System.IO.File.WriteAllText(_userDataPath, "{}");
+                System.IO.File.WriteAllText(SiteConstants.UserdataFilePath, "{}");
             }
 
-            _pythonPath = Path.Combine(Directory.GetCurrentDirectory(), "PythonScripts", "PythonScript.py");
-            _engine.ExecuteFile(_pythonPath, _scope);
+            var jsonData = System.IO.File.ReadAllText(SiteConstants.UserdataFilePath);
+            ViewBag.ChartData = jsonData;
 
-            dynamic read_json_file = _scope.GetVariable("read_json_file");
-            read_json_file(_userDataPath);
+            dynamic get_data_from_json = scope.GetVariable("get_data_from_json");
+            var data = get_data_from_json(SiteConstants.UserdataFilePath);
 
-            get_data_from_json = _scope.GetVariable("get_data_from_json");
+            var accounts = new List<string>();
+            foreach(var account in data)
+            {
+                accounts.Add(account);
+            }
+
+            HomeViewModel model = new HomeViewModel
+            {
+                AccountNames = accounts
+            };
+
+            return View(model);
         }
 
-        public IActionResult Privacy()
+        private ScriptScope EstablishPython()
         {
-            return View();
+            ScriptEngine engine = Python.CreateEngine();
+            ScriptScope scope = engine.CreateScope();
+
+            string _pythonPath = Path.Combine(Directory.GetCurrentDirectory(), "PythonScripts", "PythonScript.py");
+            engine.ExecuteFile(_pythonPath, scope);
+
+            dynamic read_json_file = scope.GetVariable("read_json_file");
+            read_json_file(SiteConstants.UserdataFilePath);
+
+            return scope;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -68,70 +67,35 @@ namespace Paidit.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public ActionResult ChartData()
-        {
-            var jsonData = System.IO.File.ReadAllText(_userDataPath);
-            var data = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonData);
-
-            ViewBag.ChartData = data;
-
-            return View();
-        }
-
         [HttpPost]
-        public ActionResult SendNewAccount(string accountName)
+        public ActionResult AddNewAccountAjax(string accountName)
         {
-            EstablishPython();
-
-            if (_engine == null || _scope == null)
+            if(scope == null)
             {
                 return new EmptyResult();
             }
 
-            dynamic add_bank_account = _scope.GetVariable("add_bank_account");
-            add_bank_account(_userDataPath, accountName);
+            dynamic add_bank_account = scope.GetVariable("add_bank_account");
+            add_bank_account(SiteConstants.UserdataFilePath, accountName);
 
             return new EmptyResult();
         }
 
         [HttpPost]
-        public ActionResult SendNewData(string accountName, string date, int amount)
+        public ActionResult SendNewDataAjax(string accountName, string date, int amount)
         {
-            EstablishPython();
-
-            if (_engine == null || _scope == null)
+            if(scope == null)
             {
                 return new EmptyResult();
             }
 
-            dynamic add_data_to_account = _scope.GetVariable("add_data_to_account");
+            dynamic add_data_to_account = scope.GetVariable("add_data_to_account");
 
-            Debug.WriteLine("Path: " + _userDataPath);
-            Debug.WriteLine("Account: " + accountName);
-            Debug.WriteLine("Date: " + date);
-            Debug.WriteLine("Amount: " + amount);
-
-            add_data_to_account(_userDataPath, accountName, date, amount);
-
-            ChartData();
+            add_data_to_account(SiteConstants.UserdataFilePath, accountName, date, amount);
+            var jsonData = System.IO.File.ReadAllText(SiteConstants.UserdataFilePath);
+            ViewBag.ChartData = jsonData;
 
             return new EmptyResult();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> OverwriteUserdata(IFormFile userdataJSON)
-        {
-            if (userdataJSON == null || userdataJSON.Length == 0)
-            {
-                return RedirectToAction("Index");
-            }
-
-            using (var stream = new FileStream(_userDataPath, FileMode.Create))
-            {
-                await userdataJSON.CopyToAsync(stream);
-            }
-
-            return RedirectToAction("Index");
         }
     }
 }

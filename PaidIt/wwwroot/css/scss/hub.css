@@ -115,6 +115,29 @@
   * body ul li.small_li {
     font-size: 1rem;
   }
+  * body .bg-xo_accent {
+    background-color: #ffb255;
+  }
+  * body .bg-xo_select {
+    background-color: #92c397;
+    color: #000000;
+    border: 1px solid #242634;
+  }
+  * body .bg-xo_background {
+    background-color: #1e1d1e;
+  }
+  * body .bg-xo_text {
+    background-color: #ffffff;
+  }
+  * body .bg-xo_muted-text {
+    background-color: #dddddd;
+  }
+  * body .bg-xo_primary {
+    background-color: #181920;
+  }
+  * body .bg-xo_secondary {
+    background-color: #242634;
+  }
 }
 @media (max-width: 768px) {
   * body h1 {
@@ -326,7 +349,22 @@
 .portlet_main .portlet_body .portlet_list li {
   width: 100%;
   margin: 0 0.1rem;
-  border-radius: 0.5rem;
+}
+.portlet_main .portlet_body .portlet_child-centrepiece {
+  background-color: #242634;
+  margin: auto;
+  padding: 1rem;
+  border: solid 1px #92c397;
+}
+@media (min-width: 1440px) {
+  .portlet_main .portlet_body .portlet_child-centrepiece {
+    width: 60%;
+  }
+}
+@media (max-width: 1440px) {
+  .portlet_main .portlet_body .portlet_child-centrepiece {
+    width: 100%;
+  }
 }
 
 /* INTENDED FOR SPECIFIC STYLING ON OBJECTS USED ON EVERY PAGE */ /* INTENDED FOR ALL VARIABLES THAT WILL NEED TO BE GLOBALLY ACCESSED */
@@ -392,14 +430,14 @@
     display: none;
   }
 }
-.secondary_button .secondary_button--selectable {
+.secondary_button.secondary_button--selectable {
   color: #ffffff;
   pointer-events: all;
 }
-.secondary_button .secondary_button--selectable:hover {
+.secondary_button.secondary_button--selectable:hover {
   font-size: 1.5rem;
 }
-.secondary_button .secondary_button--selectable.button_focus {
+.secondary_button.secondary_button--selectable.button_focus {
   color: #ffb255 !important;
 }
 

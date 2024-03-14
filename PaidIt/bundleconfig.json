@@ -1,0 +1,20 @@
+[
+  {
+    "outputFileName": "wwwroot/js/chart.accounts.min.js",
+    "inputFiles": [
+      "wwwroot/js/chart.accounts.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/site.min.js",
+    "inputFiles": [
+      "wwwroot/js/site.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/chartjs.min.js",
+    "inputFiles": [
+      "wwwroot/js/chartjs.js"
+    ]
+  }
+]

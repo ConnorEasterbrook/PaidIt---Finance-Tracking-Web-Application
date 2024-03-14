@@ -3,37 +3,72 @@ import urllib
 import random
 from datetime import datetime
 
-### A basic function to read a json file
 def read_json_file(file_path):
     with open(file_path, 'r') as f:
+        sanity_check_data(file_path)
+        return json.load(f)
+
+def sanity_check_data(file_path):
+    with open(file_path, "r") as f:
         data = json.load(f)
 
-        if "Accounts" not in data:
-            data = {"Accounts": {}}
-            write_json_file(file_path, data)
+    if data is None or "Accounts" not in data:
+        data = {"Accounts": {}}
 
-### A basic function to write a json file
+    if not isinstance(data["Accounts"], dict):
+        return "Error: Accounts must be a dictionary"
+
+    for account_name in data["Accounts"]:
+        if "Inputs" not in data["Accounts"][account_name]:
+            data["Accounts"][account_name]["Inputs"] = []
+
+        if "Colour" not in data["Accounts"][account_name]:
+            random_color = "#{:06x}".format(random.randint(0, 0xFFFFFF))
+            data["Accounts"][account_name]["Colour"] = random_color
+
+    write_json_file(file_path, data)
+    
 def write_json_file(file_path, data):
     with open(file_path, "w") as f:
         sorted_data = sort_data(data)
         json.dump(sorted_data, f)
+        
+def sort_data(data):
+    if not data or "Accounts" not in data:
+        return data
 
-### A basic function to retrieve the data from the json file
+    if not isinstance(data["Accounts"], dict):
+        return data
+
+    # Sort Accounts alphabetically
+    sorted_accounts = dict(sorted(data["Accounts"].items()))
+
+    # Sort Inputs by Date
+    for account_name, account_data in sorted_accounts.items():
+        if "Inputs" not in account_data or not isinstance(account_data["Inputs"], list):
+            continue
+
+        account_data["Inputs"].sort(key=lambda x: datetime.strptime(x["Date"], "%Y-%m-%d"))
+
+    data["Accounts"] = sorted_accounts
+    return data
+
+### A basic function to retrieve all data from the json file under the "Accounts" key
 def get_data_from_json(file_path):
-    with open(file_path, "r") as f:
-        data = json.load(f)
-
-    json_data = json.dumps(data)
-
-    url = "Home/ChartData"
-    headers = {"Content-Type": "application/json"}
-    req = urllib.Request(url, json_data, headers)
-    response = urllib.urlopen(req)
+    data = read_json_file(file_path)
+    
+    if data is None:
+        return "Error reading JSON file"
+    
+    if not data["Accounts"]:
+        return "No accounts found"
+    
+    return data["Accounts"]
+    
 
 ### A basic function to add a new user to the json file
 def add_bank_account(file_path, account_name):
-    with open(file_path, "r") as f:
-        data = json.load(f)
+    data = read_json_file(file_path)
 
     if data is None or "Accounts" not in data:
         data = {"Accounts": {}}
@@ -44,21 +79,8 @@ def add_bank_account(file_path, account_name):
     if account_name not in data["Accounts"]:
         data["Accounts"][account_name] = {}
 
-    if "Inputs" not in data["Accounts"][account_name]:
-        data["Accounts"][account_name]["Inputs"] = []
-
-    if "Colour" not in data["Accounts"][account_name]:
-        random_color = "#{:06x}".format(random.randint(0, 0xFFFFFF))
-        data["Accounts"][account_name]["Colour"] = random_color
-
+    sanity_check_data(file_path)
     write_json_file(file_path, data)
-
-### A basic function to remove a user from the json file
-def remove_bank_account(data, name, account_name):
-    if name in data and account_name in data[name]:
-        del data[name][account_name]
-
-    return data
 
 ### A basic function to add data to a user in the json file
 def add_data_to_account(file_path, account_name, input_date, input_amount):
@@ -91,24 +113,3 @@ def add_data_to_account(file_path, account_name, input_date, input_amount):
     write_json_file(file_path, data)
 
     return "Success"
-
-### Sort the data in the json file
-def sort_data(data):
-    if not data or "Accounts" not in data:
-        return data
-
-    if not isinstance(data["Accounts"], dict):
-        return data
-
-    # Sort Accounts alphabetically
-    sorted_accounts = dict(sorted(data["Accounts"].items()))
-
-    # Sort Inputs by Date
-    for account_name, account_data in sorted_accounts.items():
-        if "Inputs" not in account_data or not isinstance(account_data["Inputs"], list):
-            continue
-
-        account_data["Inputs"].sort(key=lambda x: datetime.strptime(x["Date"], "%Y-%m-%d"))
-
-    data["Accounts"] = sorted_accounts
-    return data

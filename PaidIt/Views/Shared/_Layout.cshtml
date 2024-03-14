@@ -10,33 +10,22 @@
     <link rel="stylesheet" href="/Paidit.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer>
-        <div class="container">
-            @* <div id="accountsContainer">
-                <form method="get" asp-controller="Home" asp-action="Index">
-                    <button type="submit">Overview</button>
-                </form>
-                <form method="get" asp-controller="Home" asp-action="Goals">
-                    <button type="submit">Goals</button>
-                </form>
-            </div> *@
-            <div id="copyright">
-                &copy; 2023 - Connor Easterbrook
-            </div>
-        </div>
-    </footer>
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
 
     <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/chartjs.js"></script>
-    <script src="/js/site.js" asp-append-version="true"></script>
     <script src="/lib/jquery/dist/jquery.min.js"></script>
-    <script src="/js/lineChart.js" asp-append-version="true"></script>
+
+    <environment include="Development">
+        <script src="/js/site.js" asp-append-version="true"></script>
+        <script src="/js/chartjs.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="/js/site.min.js" asp-append-version="true"></script>
+        <script src="/js/chartjs.min.js"></script>
+    </environment>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
