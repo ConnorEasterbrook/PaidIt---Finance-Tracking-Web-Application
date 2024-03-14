@@ -40,7 +40,7 @@
 
         <div id="editAccountCover" class="portlet_child-centrepiece d-none">
             <div class="form-group">
-                @if(Model.AccountNames.Count > 0)
+                @if(Model.AccountNames != null && Model.AccountNames.Count > 0)
                 {
                     <label for="accountSelect">Select Account</label>
                     <select class="form-control" id="accountSelect">
