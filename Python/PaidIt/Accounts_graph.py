@@ -1,16 +1,13 @@
 import pandas as pd
-import numpy as np
 from matplotlib.figure import Figure
-from data_controller import get_data_from_json
+from Data_controller import get_data_from_json
 
 
-def build_graph(data_path):
-    # Variables
+def build_graph(data_path, currency_sign="£"):
     xo_colour_text = '#ffffff'
     xo_colour_muted_text = '#dddddd'
     xo_colour_background = '#1e1d1e'
 
-    # Data
     data = get_data_from_json(data_path)
 
     # Preprocessing the data
@@ -26,12 +23,11 @@ def build_graph(data_path):
 
     # Convert accumulated_data to DataFrame
     dataframe = pd.DataFrame(accumulated_data).T
-    for account in dataframe.columns:
-        dataframe[account] = dataframe[account].ffill()
-
     # Sort DataFrame by index (date) to ensure chronological order
     dataframe.index = pd.to_datetime(dataframe.index)
     dataframe.sort_index(inplace=True)
+    for account in dataframe.columns:
+        dataframe[account] = dataframe[account].ffill()
 
     dates = dataframe.index
     values = dataframe.values.T
@@ -42,11 +38,12 @@ def build_graph(data_path):
 
     # Stacked area chart
     ax.stackplot(dates, values, labels=dataframe.columns,
-                 colors=[data[account]["Colour"] for account in dataframe.columns])
+                 colors=[data[account]["Colour"] for account in dataframe.columns], alpha=0.5)
     ax.legend(loc='upper left')
 
-    ### Style Graph
     fig.set_facecolor(xo_colour_background)
+    # Add currency sign to y-axis
+    ax.yaxis.set_major_formatter('' + currency_sign + '{x:,.0f}')
     ax.patch.set_alpha(0)
     ax.margins(x=0, y=0)
     ax.tick_params(axis='x', colors=xo_colour_text)
@@ -55,7 +52,7 @@ def build_graph(data_path):
     ax.spines['left'].set_color(xo_colour_text)
     ax.spines['top'].set_color(xo_colour_background)
     ax.spines['right'].set_color(xo_colour_background)
-    ax.set_xlabel("Date", color=xo_colour_text)
-    ax.set_ylabel("Amount", color=xo_colour_text)
+    ax.set_xlabel("Date", color=xo_colour_muted_text)
+    ax.set_ylabel("Amount", color=xo_colour_muted_text)
 
     return fig

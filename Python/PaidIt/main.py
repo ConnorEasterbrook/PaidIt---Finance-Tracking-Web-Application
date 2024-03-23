@@ -1,5 +1,5 @@
-from data_controller import file_exists
-from view_controller import build_view, build_error_view
+from Data_controller import file_exists
+from View_controller import build_view, build_error_view
 
 data_path = "userdata.json"
 error_code = file_exists(data_path)
